@@ -20,8 +20,16 @@ public record Vector3(double x, double y, double z) {
         return new Vector3(x * scalar, y * scalar, z * scalar);
     }
 
+    public static Vector3 mult(final double scalar, final Vector3 v) {
+        return v.mult(scalar);
+    }
+
     public Vector3 div(final double scalar) {
         return new Vector3(x / scalar, y / scalar, z / scalar);
+    }
+
+    public static Vector3 div(final double scalar, final Vector3 v) {
+        return v.div(scalar);
     }
 
     public double dot(final Vector3 v) {
