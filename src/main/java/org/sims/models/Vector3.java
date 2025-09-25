@@ -32,6 +32,10 @@ public record Vector3(double x, double y, double z) {
         return Vector3.norm(this);
     }
 
+    public double norm2() {
+        return Vector3.norm2(this);
+    }
+
     public Vector3 hadamard(final Vector3 v) {
         return Vector3.hadamard(this, v);
     }
@@ -61,7 +65,11 @@ public record Vector3(double x, double y, double z) {
     }
 
     public static double norm(final Vector3 v) {
-        return Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+        return Math.sqrt(Vector3.norm2(v));
+    }
+
+    public static double norm2(final Vector3 v) {
+        return v.x * v.x + v.y * v.y + v.z * v.z;
     }
 
     public static Vector3 hadamard(final Vector3 v1, final Vector3 v2) {
