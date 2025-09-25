@@ -4,6 +4,15 @@ public abstract class Forces {
     public static final double G = 1;
     public static final double H = 0.05;
 
+    /**
+     * Newtonian gravity with softening
+     *
+     * @apiNote Assumes G = 1, m1 = m2 = 1
+     *
+     * @param p1 The first particle
+     * @param p2 The second particle
+     * @return The force exerted by p2 on p1
+     */
     public static Vector3 gravity(final Particle p1, final Particle p2) {
         final var rij = p1.position().subtract(p2.position());
         final var r2 = rij.norm2();
