@@ -7,10 +7,10 @@ import org.sims.interfaces.Named;
  *
  * Each particle has a unique ID, auto-assigned on creation.
  */
-public record Particle(long ID, Vector position, Vector velocity, double radius) implements Named {
+public record Particle(long ID, Vector3 position, Vector3 velocity, double radius) implements Named {
     private static long SERIAL = 0L;
 
-    public Particle(final Vector position, final Vector velocity, final double radius) {
+    public Particle(final Vector3 position, final Vector3 velocity, final double radius) {
         this(SERIAL++, position, velocity, radius);
     }
 
