@@ -1,5 +1,6 @@
 package org.sims;
 
+import org.sims.integrals.Verlet;
 import org.sims.interfaces.Step;
 import org.sims.oscillator.*;
 
@@ -15,12 +16,7 @@ public class MainOscillator {
     private static final ProgressBar pb = new ProgressBar("Oscillating", -1);
 
     public static void main(final String[] args) throws Exception {
-        final var simulation = OscillatorSimulation.build(
-                OscillatorSimulation.Integrators.VERLET,
-                1000,
-                0.01,
-                1.0,
-                2.0);
+        final var simulation = OscillatorSimulation.build(1000, 1e4, 1.0, 100.0, Verlet::new);
 
         try (pb; final var engine = new OscillatorEngine(simulation)) {
             pb.maxHint(simulation.steps());
