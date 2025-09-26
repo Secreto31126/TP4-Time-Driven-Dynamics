@@ -5,5 +5,5 @@ import java.util.*;
 import org.sims.models.Particle;
 
 public interface Integrator {
-    void step(final Collection<Particle> particles);
+    List<Particle> step(final Collection<Particle> particles);
 }
