@@ -16,7 +16,7 @@ public abstract class Forces {
     public static Vector3 gravity(final Particle p1, final Particle p2) {
         final var rij = p1.position().subtract(p2.position());
         final var r2 = rij.norm2();
-        final var factor = - Math.pow(r2 + H * H, 1.5);
+        final var factor = -Math.pow(r2 + H * H, 1.5);
         return rij.div(factor);
     }
 
