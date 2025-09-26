@@ -7,19 +7,22 @@ import org.sims.interfaces.Named;
 /**
  * A particle in 2D space with position, velocity, and radius.
  *
+ * @apiNote positions are NOT immutable,
+ * use position() to get the current immutable position.
+ *
  * Each particle has a unique ID, auto-assigned on creation.
  */
-public record Particle(long ID, LinkedList<Vector3> positions, Vector3 velocity, double radius) implements Named {
+public record Particle(long ID, LinkedList<Vector3> positions, Vector3 position, Vector3 velocity, double radius) implements Named {
     private static final long MEMORY = 5;
 
     private static long SERIAL = 0L;
 
     public Particle(final Vector3 position, final Vector3 dt, final Vector3 velocity, final double radius) {
-        this(SERIAL++, positions(position, velocity, dt), velocity, radius);
+        this(SERIAL++, positions(position, velocity, dt), position, velocity, radius);
     }
 
     public Particle(final Particle p, final Vector3 pos, final Vector3 vel) {
-        this(p.ID, p.positions, vel, p.radius);
+        this(p.ID, p.positions, pos, vel, p.radius);
         positions.addFirst(pos);
         positions.removeLast();
     }
@@ -39,18 +42,10 @@ public record Particle(long ID, LinkedList<Vector3> positions, Vector3 velocity,
     }
 
     /**
-     * Returns the current position of the particle.
-     *
-     * @see #position(int)
-     *
-     * @return The particle position.
-     */
-    public Vector3 position() {
-        return position(0);
-    }
-
-    /**
      * Returns the position of the particle n steps back in history.
+     *
+     * @apiNote To get the current position, use the immutable position value.
+     * This method is NOT thread-safe.
      *
      * @param i The number of steps back in history (0 for current position).
      * @return The particle position at the specified history step.
@@ -66,7 +61,7 @@ public record Particle(long ID, LinkedList<Vector3> positions, Vector3 velocity,
 
     @Override
     public String toString() {
-        return "%s %s".formatted(position(), velocity);
+        return "%s %s".formatted(position, velocity);
     }
 
     /**
