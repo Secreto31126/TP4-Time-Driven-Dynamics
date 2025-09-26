@@ -19,4 +19,9 @@ public abstract class Forces {
         final var factor = - Math.pow(r2 + H * H, 1.5);
         return rij.div(factor);
     }
+
+    public static Vector3 oscillator(final Particle p, final double amplitude, final double omega, final double t) {
+        final var k = amplitude * omega * omega;
+        return p.position().mult(-k);
+    }
 }
