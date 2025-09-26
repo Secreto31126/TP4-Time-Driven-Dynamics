@@ -8,7 +8,7 @@ class Particle:
     velocity: Vector
     radius: float
 
-    def __init__(self, x: float, y: float, vx: float, vy: float, r: float):
-        object.__setattr__(self, 'position', Vector(x, y))
-        object.__setattr__(self, 'velocity', Vector(vx, vy))
-        object.__setattr__(self, 'radius', r)
+    def __init__(self, x: float, y: float, z: float, vx: float, vy: float, vz: float):
+        object.__setattr__(self, 'position', Vector(x, y, z))
+        object.__setattr__(self, 'velocity', Vector(vx, vy, vz))
+        object.__setattr__(self, 'radius', 1)
