@@ -1,5 +1,7 @@
 package org.sims.models;
 
+import java.util.Locale;
+
 public record Vector3(double x, double y, double z) {
     public static final Vector3 ZERO_ZERO_ZERO = new Vector3(0.0, 0.0, 0.0);
     public static final Vector3 ZERO = ZERO_ZERO_ZERO;
@@ -50,6 +52,6 @@ public record Vector3(double x, double y, double z) {
 
     @Override
     public String toString() {
-        return "%.14f %.14f %.14f".formatted(x, y, z);
+        return String.format(Locale.US, "%.14f %.14f %.14f", x, y, z);
     }
 }
