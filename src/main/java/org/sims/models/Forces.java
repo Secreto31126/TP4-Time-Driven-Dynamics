@@ -30,6 +30,9 @@ public abstract class Forces {
      * @return
      */
     public static Vector3 oscillator(final Particle p, final double k, final double gamma, final double mass) {
-        return p.position().mult(-k).subtract(p.position(1).mult(gamma)).div(mass);
+        return p.position()
+                .mult(-k)
+                .subtract(p.velocity().mult(gamma))
+                .div(mass);
     }
 }
