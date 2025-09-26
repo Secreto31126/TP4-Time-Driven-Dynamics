@@ -1,22 +1,8 @@
 from functools import cache
+import os
 
 from classes.particle import Particle
 import resources
-
-@cache
-def checkpoints(interval: float = 0.015):
-    with open(resources.path('events.txt'), 'r') as file:
-        event_times = [float(line.strip().split(' ')[0]) for line in file if line.strip()]
-
-    checkpoints: list[int] = []
-    previous = 0.0
-
-    for i, time in enumerate(event_times):
-        if time > previous + interval:
-            checkpoints.append(i)
-            previous = time
-
-    return checkpoints
 
 def next(f: int):
     """
@@ -31,4 +17,4 @@ def count():
     """
     Returns the number of animations steps.
     """
-    return 1 + len(checkpoints()) # initial state
+    return len(os.listdir(resources.path('steps')))
