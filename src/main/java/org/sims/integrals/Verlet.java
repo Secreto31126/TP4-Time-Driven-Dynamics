@@ -6,11 +6,11 @@ import org.sims.interfaces.ForceCalculator;
 import org.sims.interfaces.Integrator;
 import org.sims.models.Particle;
 
-public record Verlet(double dt, List<Double> params, ForceCalculator force) implements Integrator {
+public record Verlet(double dt, ForceCalculator force) implements Integrator {
     @Override
     public List<Particle> step(final Collection<Particle> particles) {
         final var list = List.copyOf(particles);
-        final var acc = force.apply(list, params);
+        final var acc = force.apply(list);
 
         return particles.stream().map(p -> {
             final var a = p.position().mult(2);
