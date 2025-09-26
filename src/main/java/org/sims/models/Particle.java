@@ -17,7 +17,7 @@ public record Particle(long ID, LinkedList<Vector3> positions, Vector3 position,
 
     private static long SERIAL = 0L;
 
-    public Particle(final Vector3 position, final Vector3 dt, final Vector3 velocity, final double radius) {
+    public Particle(final Vector3 position, final Vector3 velocity, final double radius, final double dt) {
         this(SERIAL++, positions(position, velocity, dt), position, velocity, radius);
     }
 
@@ -72,11 +72,11 @@ public record Particle(long ID, LinkedList<Vector3> positions, Vector3 position,
      * @param dt       The time step vector.
      * @return A linked list of MEMORY previous positions.
      */
-    private static LinkedList<Vector3> positions(final Vector3 position, final Vector3 velocity, final Vector3 dt) {
+    private static LinkedList<Vector3> positions(final Vector3 position, final Vector3 velocity, final double dt) {
         final var positions = new LinkedList<Vector3>(List.of(position));
 
         for (int i = 1; i < MEMORY; i++) {
-            positions.push(position.subtract(velocity.mult(dt.x() * i)));
+            positions.push(position.subtract(velocity.mult(dt * i)));
         }
 
         return positions;
