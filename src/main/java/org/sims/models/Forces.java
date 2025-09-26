@@ -23,14 +23,13 @@ public abstract class Forces {
     /**
      * Harmonic oscillation force
      *
-     * @apiNote Assumes m = 1, r0 = Vector3.ZERO
-     *
-     * @param p         The particle
-     * @param amplitude The oscillating amplitude
-     * @param omega     The angular frequency
+     * @param p     The particle
+     * @param k     TODO: Idk
+     * @param gamma The damping coefficient
+     * @param mass  The mass of the particle
      * @return
      */
-    public static Vector3 oscillator(final Particle p, final double amplitude, final double omega) {
-        return p.position().mult(-amplitude).add(p.velocity().mult(-omega));
+    public static Vector3 oscillator(final Particle p, final double k, final double gamma, final double mass) {
+        return p.position().mult(-k).subtract(p.position(1).mult(gamma)).div(mass);
     }
 }

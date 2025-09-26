@@ -12,11 +12,11 @@ import me.tongfei.progressbar.ProgressBar;
  * So much boilerplate 🤢
  */
 public class MainOscillator {
-    private static final long SAVE_INTERVAL = 10L;
+    private static final long SAVE_INTERVAL = 3L;
     private static final ProgressBar pb = new ProgressBar("Oscillating", -1);
 
     public static void main(final String[] args) throws Exception {
-        final var simulation = OscillatorSimulation.build(1000, 1e4, 1.0, 100.0, Verlet::new);
+        final var simulation = OscillatorSimulation.build((long) (5.0 / 0.01), 0.01, 1e4, 100, 70.0, Verlet::new);
 
         try (pb; final var engine = new OscillatorEngine(simulation)) {
             pb.maxHint(simulation.steps());
