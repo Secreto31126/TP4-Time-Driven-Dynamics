@@ -6,7 +6,7 @@ import java.util.function.*;
 
 import org.sims.interfaces.*;
 
-public record Orchestrator(Simulation<?> simulation, Engine<?> engine) {
+public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
     /**
      * Start the simulation
      *
