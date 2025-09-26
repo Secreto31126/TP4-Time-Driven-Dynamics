@@ -3,11 +3,12 @@ package org.sims.oscillator;
 import java.io.*;
 
 import org.sims.interfaces.Step;
+import org.sims.models.Particle;
 
-public record OscillatorStep(long i) implements Step {
+public record OscillatorStep(long i, Particle particle) implements Step {
     @Override
     public void saveTo(Writer writer) throws IOException {
-        writer.write(Long.toString(i));
+        writer.write(particle.toString());
         writer.write('\n');
     }
 }

@@ -15,7 +15,12 @@ public class MainOscillator {
     private static final ProgressBar pb = new ProgressBar("Oscillating", -1);
 
     public static void main(final String[] args) throws Exception {
-        final var simulation = OscillatorSimulation.build(1000);
+        final var simulation = OscillatorSimulation.build(
+                OscillatorSimulation.Integrators.VERLET,
+                1000,
+                0.01,
+                1.0,
+                2.0);
 
         try (pb; final var engine = new OscillatorEngine(simulation)) {
             pb.maxHint(simulation.steps());
