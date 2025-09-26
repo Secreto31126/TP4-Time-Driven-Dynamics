@@ -20,8 +20,17 @@ public abstract class Forces {
         return rij.div(factor);
     }
 
-    public static Vector3 oscillator(final Particle p, final double amplitude, final double omega, final double t) {
-        final var k = amplitude * omega * omega;
-        return p.position().mult(-k);
+    /**
+     * Harmonic oscillation force
+     *
+     * @apiNote Assumes m = 1, r0 = Vector3.ZERO
+     *
+     * @param p         The particle
+     * @param amplitude The oscillating amplitude
+     * @param omega     The angular frequency
+     * @return
+     */
+    public static Vector3 oscillator(final Particle p, final double amplitude, final double omega) {
+        return p.position().mult(-amplitude).add(p.velocity().mult(-omega));
     }
 }
