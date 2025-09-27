@@ -31,8 +31,8 @@ def main(seconds: float):
 if __name__ == "__main__":
     sim, sol, t = main(5)
 
+    plt.plot(t, sol, ls='--', lw=3) # pyright: ignore[reportUnknownMemberType]
     plt.plot(t, sim) # pyright: ignore[reportUnknownMemberType]
-    plt.plot(t, sol) # pyright: ignore[reportUnknownMemberType]
 
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
@@ -42,4 +42,5 @@ if __name__ == "__main__":
 
     plt.ylim(-1.1, 1.1) # pyright: ignore[reportUnknownMemberType]
 
+    plt.legend(["Solución analítica", "Simulación"], fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.show() # pyright: ignore[reportUnknownMemberType]
