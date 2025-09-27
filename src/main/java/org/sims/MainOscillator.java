@@ -11,7 +11,6 @@ import me.tongfei.progressbar.ProgressBar;
  */
 public class MainOscillator {
     private static final long SAVE_INTERVAL = 10L;
-    private static final ProgressBar pb = new ProgressBar("Oscillating", -1);
 
     public static void main(final String[] args) throws Exception {
         final var seconds = 5.0;
@@ -19,10 +18,11 @@ public class MainOscillator {
 
         final var integrator = IntegratorPicker.pick(args[0]);
         final var simulation = OscillatorSimulation.build((long) (seconds / dt), dt, 1e4, 100, 70.0, integrator);
+
+        final var pb = new ProgressBar("Oscillating", simulation.steps());
         final var onStep = new Orchestrator.SkipSteps(SAVE_INTERVAL, pb::step);
 
         try (pb; final var engine = new OscillatorEngine(simulation)) {
-            pb.maxHint(simulation.steps());
             new Orchestrator(simulation, engine).start(onStep);
         }
     }
