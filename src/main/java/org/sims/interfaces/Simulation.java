@@ -5,13 +5,27 @@ import java.io.*;
 /**
  * Simulations define the setup and parameters for a simulation run.
  */
-public interface Simulation<S extends Step> {
+public interface Simulation<S extends Step, E> {
     /**
      * The number of steps in the simulation
      *
      * @return The number of steps
      */
     long steps();
+
+    /**
+     * The entities involved in the simulation
+     *
+     * @return A collection of entities
+     */
+    E entities();
+
+    /**
+     * The integrator used in the simulation
+     *
+     * @return The integrator
+     */
+    Integrator integrator();
 
     /**
      * Save the simulation setup to a writer

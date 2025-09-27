@@ -1,17 +1,19 @@
 package org.sims.galaxy;
 
 import java.io.*;
+import java.util.List;
 
-import org.sims.interfaces.Simulation;
+import org.sims.interfaces.*;
+import org.sims.models.*;
 
-public record GalaxySimulation(long steps) implements Simulation<GalaxyStep> {
+public record GalaxySimulation(long steps, List<Particle> entities, Integrator integrator) implements Simulation<GalaxyStep, List<Particle>> {
     /**
      * Build a simulation
      *
      * @return the built simulation
      */
     public static GalaxySimulation build(final long steps) {
-        return new GalaxySimulation(steps);
+        return new GalaxySimulation(steps, List.of(), null);
     }
 
     @Override

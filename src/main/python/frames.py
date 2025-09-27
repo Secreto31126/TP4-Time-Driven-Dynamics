@@ -1,34 +1,22 @@
 from functools import cache
+import os
+
+import pandas as pd
 
 from classes.particle import Particle
 import resources
-
-@cache
-def checkpoints(interval: float = 0.015):
-    with open(resources.path('events.txt'), 'r') as file:
-        event_times = [float(line.strip().split(' ')[0]) for line in file if line.strip()]
-
-    checkpoints: list[int] = []
-    previous = 0.0
-
-    for i, time in enumerate(event_times):
-        if time > previous + interval:
-            checkpoints.append(i)
-            previous = time
-
-    return checkpoints
 
 def next(f: int):
     """
     Reads the input file for a given frame.
     """
     file_path = resources.path('steps', f"{f}.txt")
-    with open(file_path, 'r') as file:
-        return f, [Particle(*map(float, line.strip().split())) for line in file]
+    df = pd.read_csv(file_path, header=None, delimiter=' ').astype("float") # type: ignore[reportUnknownMemberType]
+    return f, [Particle(*d) for _, d in df.iterrows()]
 
 @cache
 def count():
     """
     Returns the number of animations steps.
     """
-    return 1 + len(checkpoints()) # initial state
+    return len(os.listdir(resources.path('steps')))

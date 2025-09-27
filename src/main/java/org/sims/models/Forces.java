@@ -16,12 +16,23 @@ public abstract class Forces {
     public static Vector3 gravity(final Particle p1, final Particle p2) {
         final var rij = p1.position().subtract(p2.position());
         final var r2 = rij.norm2();
-        final var factor = - Math.pow(r2 + H * H, 1.5);
+        final var factor = -Math.pow(r2 + H * H, 1.5);
         return rij.div(factor);
     }
 
-    public static Vector3 oscillator(final Particle p, final double amplitude, final double omega, final double t) {
-        final var k = amplitude * omega * omega;
-        return p.position().mult(-k);
+    /**
+     * Harmonic oscillation force
+     *
+     * @param p     The particle
+     * @param k     TODO: Idk
+     * @param gamma The damping coefficient
+     * @param mass  The mass of the particle
+     * @return
+     */
+    public static Vector3 oscillator(final Particle p, final double k, final double gamma, final double mass) {
+        return p.position()
+                .mult(-k)
+                .subtract(p.velocity().mult(gamma))
+                .div(mass);
     }
 }

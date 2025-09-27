@@ -3,17 +3,19 @@ package org.sims.oscillator;
 import java.util.*;
 
 import org.sims.interfaces.*;
+import org.sims.models.*;
 
-public record OscillatorEngine(Simulation<?> simulation) implements Engine<OscillatorStep> {
+public record OscillatorEngine(Simulation<?, Particle> simulation) implements Engine<OscillatorStep> {
     @Override
     public OscillatorStep initial() {
-        return new OscillatorStep(0);
+        return new OscillatorStep(0, simulation.entities());
     }
 
     @Override
     public Iterator<OscillatorStep> iterator() {
         return new Iterator<OscillatorStep>() {
             private long current = 0;
+            private Particle p = simulation.entities();
 
             @Override
             public boolean hasNext() {
@@ -22,7 +24,8 @@ public record OscillatorEngine(Simulation<?> simulation) implements Engine<Oscil
 
             @Override
             public OscillatorStep next() {
-                return new OscillatorStep(++current);
+                p = simulation.integrator().step(List.of(p)).getFirst();
+                return new OscillatorStep(++current, p);
             }
         };
     }
