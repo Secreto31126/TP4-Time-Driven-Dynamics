@@ -12,7 +12,7 @@ import me.tongfei.progressbar.ProgressBar;
  * So much boilerplate 🤢
  */
 public class MainOscillator {
-    private static final long SAVE_INTERVAL = 3L;
+    private static final long SAVE_INTERVAL = 10L;
     private static final ProgressBar pb = new ProgressBar("Oscillating", -1);
 
     public static void main(final String[] args) throws Exception {
