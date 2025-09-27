@@ -10,7 +10,13 @@ import org.sims.interfaces.*;
 
 public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
     /**
-     * Start the simulation
+     * Start the simulation.
+     *
+     * OnStep is called on each step and can be used
+     * to filter which steps to save.
+     *
+     * @apiNote Saves the setup and steps in the "steps" directory.
+     * @apiNote The step 0 is always saved.
      *
      * @param onStep The OnStep event handler.
      */
