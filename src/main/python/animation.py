@@ -21,7 +21,7 @@ def main():
     with open(resources.path("setup.txt")) as _:
         pass
 
-    executor = Executor(frames.next, frames.checkpoints())
+    executor = Executor(frames.next, range(frames.count()))
 
     fig, ax = plt.subplots() # pyright: ignore[reportUnknownMemberType]
     ax.set_aspect('equal', adjustable="box")
