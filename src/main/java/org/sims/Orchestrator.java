@@ -22,7 +22,7 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
             simulation.saveTo(writer);
         }
 
-        try (final var animator = Executors.newSingleThreadExecutor()) {
+        try (final var animator = Executors.newFixedThreadPool(3)) {
             animator.submit(new Animator(engine.initial(), 0L));
             engine.forEach(step -> onStep.apply(step).ifPresent(idx -> animator.submit(new Animator(step, idx))));
         }
