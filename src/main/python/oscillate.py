@@ -60,4 +60,6 @@ if __name__ == "__main__":
     plt.ylim(-1.1, 1.1) # pyright: ignore[reportUnknownMemberType]
 
     plt.legend(["Solución analítica", "Simulación"], fontsize=20) # pyright: ignore[reportUnknownMemberType]
+
+    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.1)
     plt.show() # pyright: ignore[reportUnknownMemberType]
