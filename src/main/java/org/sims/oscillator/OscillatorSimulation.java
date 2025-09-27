@@ -41,7 +41,11 @@ public class OscillatorSimulation implements Simulation<OscillatorStep, Particle
     public static OscillatorSimulation build(final long steps, final double dt,
             final double k, final double gamma, final double mass,
             final Integrator.Constructor constructor) {
-        final var p = new Particle(new Vector3(1, 1, 1), Vector3.ZERO, 1, dt);
+        final var p = new Particle(
+                new Vector3(1, 0, 0),
+                Vector3.ZERO,
+                1,
+                dt);
 
         return new OscillatorSimulation(steps, dt, p, k, gamma, mass, constructor);
     }
