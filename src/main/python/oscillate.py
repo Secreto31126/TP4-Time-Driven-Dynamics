@@ -7,13 +7,12 @@ import frames
 M = 70.0
 K = 1e4
 GAMMA = 100.0
-A = 1.0
 
 def solution(t: np.ndarray):
     w0 = np.sqrt(K / M)
     beta = GAMMA / (2 * M)
     wd = np.sqrt(w0 ** 2 - beta ** 2)
-    x = A * np.exp(t * -beta) * np.cos(wd * t)
+    x = np.exp(t * -beta) * np.cos(wd * t)
     return x
 
 data: list[float] = []
