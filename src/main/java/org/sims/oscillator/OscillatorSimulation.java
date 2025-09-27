@@ -2,6 +2,8 @@ package org.sims.oscillator;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.sims.interfaces.Integrator;
 import org.sims.interfaces.Simulation;
@@ -52,9 +54,10 @@ public class OscillatorSimulation implements Simulation<OscillatorStep, Particle
         writer.write("%d\n".formatted(steps));
     }
 
-    private Map<Particle, Vector3> oscillate(final Collection<Particle> particle) {
-        final var p = particle.iterator().next();
-        return Map.of(p, Forces.oscillator(p, k, gamma, mass));
+    private Map<Particle, Vector3> oscillate(final Collection<Particle> particles) {
+        return particles.stream().collect(Collectors.toMap(Function.identity(), p -> {
+            return Forces.oscillator(p, k, gamma, mass);
+        }));
     }
 
     @Override
