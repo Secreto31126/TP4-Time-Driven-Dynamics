@@ -2,6 +2,7 @@ package org.sims;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.*;
 
@@ -23,9 +24,16 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
         }
 
         try (final var animator = Executors.newFixedThreadPool(3)) {
-            animator.submit(new Animator(engine.initial(), 0L));
-            engine.forEach(step -> onStep.apply(step).ifPresent(idx -> animator.submit(new Animator(step, idx))));
+            save(animator, engine.initial(), 0L);
+            engine.forEach(step -> onStep.apply(step).ifPresent(idx -> save(animator, step, idx)));
         }
+    }
+
+    /**
+     * Save a step with idx using an executor service
+     */
+    private static void save(final ExecutorService ex, final Step step, final Long idx) {
+        ex.submit(new Animator(step, idx));
     }
 
     /**
