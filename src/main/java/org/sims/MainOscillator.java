@@ -1,6 +1,5 @@
 package org.sims;
 
-import org.sims.integrals.Verlet;
 import org.sims.interfaces.Step;
 import org.sims.oscillator.*;
 
@@ -19,7 +18,8 @@ public class MainOscillator {
         final var seconds = 5.0;
         final var dt = 1e-4;
 
-        final var simulation = OscillatorSimulation.build((long) (seconds / dt), dt, 1e4, 100, 70.0, Verlet::new);
+        final var integrator = IntegratorPicker.pick(args[0]);
+        final var simulation = OscillatorSimulation.build((long) (seconds / dt), dt, 1e4, 100, 70.0, integrator);
 
         try (pb; final var engine = new OscillatorEngine(simulation)) {
             pb.maxHint(simulation.steps());
