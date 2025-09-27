@@ -11,7 +11,7 @@ public record Verlet(double dt, ForceCalculator force) implements Integrator {
         final var list = List.copyOf(particles);
         final var acc = force.apply(list);
 
-        return particles.stream().map(p -> {
+        return particles.parallelStream().map(p -> {
             final var a = p.position().mult(2);
             final var b = p.position(1).neg();
             final var c = acc.get(p).mult(dt * dt);
