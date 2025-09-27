@@ -1,7 +1,4 @@
-package org.sims.integrators;
-
-import org.sims.interfaces.Integrator;
-import org.sims.models.Particle;
+package org.sims.integrals;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package org.sims.integrators;
+package org.sims.integrals;
 
 import org.sims.interfaces.Integrator;
 import org.sims.models.Particle;
@@ -24,7 +24,13 @@ public class GearVelocityIntegrator extends GearIntegrator implements Integrator
     }
 
     @Override
-    public void step(Collection<Particle> particles) {
+    public List<Particle> step(Collection<Particle> particles) {
 
+        return null;
+    }
+
+    @Override
+    public String name() {
+        return "GearVelocity";
     }
 }

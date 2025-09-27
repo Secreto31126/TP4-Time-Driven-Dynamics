@@ -12,20 +12,32 @@ import org.sims.interfaces.Named;
  *
  * Each particle has a unique ID, auto-assigned on creation.
  */
-public record Particle(long ID, LinkedList<Vector3> positions, Vector3 position, Vector3 velocity, double radius) implements Named {
+public record Particle(long ID, LinkedList<Vector3> positions, Vector3 position, Vector3 velocity, double radius, List<Double> derivatives) implements Named {
     private static final long MEMORY = 5;
 
     private static long SERIAL = 0L;
 
+
+    /**
+     * Constructor for predictor-corrector methods.
+     * Provides a way to modify derivatives in each step
+     * @return New Particle with all parameters the same and modified derivatives
+     */
+    public Particle(final Particle p, final Vector3 pos, final Vector3 vel, List<Double> derivatives){
+        this(p.ID, p.positions, pos, vel, p.radius, derivatives);
+    }
+
     public Particle(final Vector3 position, final Vector3 velocity, final double radius, final double dt) {
-        this(SERIAL++, positions(position, velocity, dt), position, velocity, radius);
+        this(SERIAL++, positions(position, velocity, dt), position, velocity, radius, List.of());
     }
 
     public Particle(final Particle p, final Vector3 pos, final Vector3 vel) {
-        this(p.ID, p.positions, pos, vel, p.radius);
+        this(p.ID, p.positions, pos, vel, p.radius, List.of());
         positions.addFirst(pos);
         positions.removeLast();
     }
+
+
 
     /**
      * Compute the gravitational force exerted by
@@ -52,6 +64,10 @@ public record Particle(long ID, LinkedList<Vector3> positions, Vector3 position,
      */
     public Vector3 position(int i) {
         return positions.get(i);
+    }
+
+    public List<Double> getDerivatives(){
+        return derivatives;
     }
 
     @Override
