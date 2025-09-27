@@ -10,6 +10,7 @@ import org.sims.models.*;
 
 public class OscillatorSimulation implements Simulation<OscillatorStep, Particle> {
     private final long steps;
+    private final double dt;
     private final Particle entities;
     private final double k;
     private final double gamma;
@@ -20,6 +21,7 @@ public class OscillatorSimulation implements Simulation<OscillatorStep, Particle
             final double k, final double gamma, final double mass,
             final Integrator.Constructor constructor) {
         this.steps = steps;
+        this.dt = dt;
         this.entities = entities;
         this.k = k;
         this.mass = mass;
