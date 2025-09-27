@@ -5,11 +5,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.sims.interfaces.Integrator;
-import org.sims.interfaces.Simulation;
-import org.sims.models.Forces;
-import org.sims.models.Particle;
-import org.sims.models.Vector3;
+import org.sims.interfaces.*;
+import org.sims.models.*;
 
 public class OscillatorSimulation implements Simulation<OscillatorStep, Particle> {
     private final long steps;

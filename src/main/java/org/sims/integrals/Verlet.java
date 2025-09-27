@@ -2,9 +2,8 @@ package org.sims.integrals;
 
 import java.util.*;
 
-import org.sims.interfaces.ForceCalculator;
-import org.sims.interfaces.Integrator;
-import org.sims.models.Particle;
+import org.sims.interfaces.*;
+import org.sims.models.*;
 
 public record Verlet(double dt, ForceCalculator force) implements Integrator {
     @Override
