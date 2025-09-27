@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import frames
+from streaming import SequentialStreamingExecutor as Executor
 
 M = 70.0
 K = 1e4
@@ -15,24 +16,30 @@ def solution(t: np.ndarray):
     x = np.exp(t * -beta) * np.cos(wd * t)
     return x
 
-data: list[float] = []
-for i in range(frames.count()):
-    _, particles = frames.next(i)
-    p = particles[0]
-    data.append(p.position.x)
+def main(seconds: float):
+    executor = Executor(frames.next, range(frames.count()))
 
-t_ref = np.linspace(0, 5, frames.count())
-x_ana_curve = solution(t_ref)
+    t = np.linspace(0, seconds, frames.count())
 
-plt.plot(t_ref, data) # pyright: ignore[reportUnknownMemberType]
-plt.plot(t_ref, x_ana_curve) # pyright: ignore[reportUnknownMemberType]
+    data: list[float] = []
+    for particles in executor.stream():
+        p = particles[0]
+        data.append(p.position.x)
 
-plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
-plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
+    return data, solution(t), t
 
-plt.xlabel("Tiempo (s)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-plt.ylabel("Posición (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+if __name__ == "__main__":
+    sim, sol, t = main(5)
 
-plt.ylim(-1.1, 1.1) # pyright: ignore[reportUnknownMemberType]
+    plt.plot(t, sim) # pyright: ignore[reportUnknownMemberType]
+    plt.plot(t, sol) # pyright: ignore[reportUnknownMemberType]
 
-plt.show() # pyright: ignore[reportUnknownMemberType]
+    plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
+    plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
+
+    plt.xlabel("Tiempo (s)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.ylabel("Posición (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+
+    plt.ylim(-1.1, 1.1) # pyright: ignore[reportUnknownMemberType]
+
+    plt.show() # pyright: ignore[reportUnknownMemberType]
