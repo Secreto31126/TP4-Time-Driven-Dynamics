@@ -14,7 +14,7 @@ public class MainOscillator {
 
     public static void main(final String[] args) throws Exception {
         final var seconds = 5.0;
-        final var dt = 1e-4;
+        final var dt = Double.parseDouble(args[1]);
 
         final var integrator = IntegratorPicker.pick(args[0]);
         final var simulation = OscillatorSimulation.build((long) (seconds / dt), dt, 1e4, 100, 70.0, integrator);
