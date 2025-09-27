@@ -22,4 +22,9 @@ public record Verlet(double dt, ForceCalculator force) implements Integrator {
             return new Particle(p, pos, vel);
         }).toList();
     }
+
+    @Override
+    public String name() {
+        return "Verlet";
+    }
 }

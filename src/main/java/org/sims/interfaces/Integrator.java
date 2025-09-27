@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.sims.models.Particle;
 
-public interface Integrator {
+public interface Integrator extends Named {
     /**
      * Advance the simulation by one time step
      *
