@@ -54,7 +54,9 @@ public class OscillatorSimulation implements Simulation<OscillatorStep, Particle
 
     @Override
     public void saveTo(Writer writer) throws IOException {
-        writer.write("%d\n".formatted(steps));
+        writer.write(String.format(Locale.US,
+                "%d %.14f %.14f %.14f %.14f %s\n",
+                steps, dt, k, gamma, mass, integrator.name()));
     }
 
     private Map<Particle, Vector3> oscillate(final Collection<Particle> particles) {
