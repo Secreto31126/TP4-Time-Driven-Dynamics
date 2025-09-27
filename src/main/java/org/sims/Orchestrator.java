@@ -12,10 +12,9 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
     /**
      * Start the simulation
      *
-     * @param onStep a callback called on each step, returning the idx to save
-     *               the step to, or empty to skip saving.
+     * @param onStep The OnStep event handler.
      */
-    public void start(final Function<Step, Optional<Long>> onStep) throws Exception {
+    public void start(final OnStep onStep) throws Exception {
         Resources.init();
         Resources.prepareDir("steps");
 
@@ -27,6 +26,15 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
             save(animator, engine.initial(), 0L);
             engine.forEach(step -> onStep.apply(step).ifPresent(idx -> save(animator, step, idx)));
         }
+    }
+
+    /**
+     * A function called on each step.
+     *
+     * Returning empty optionals allow the caller to skip saving steps.
+     * Similar to a filter, but it requires the idx to save to.
+     */
+    public interface OnStep extends Function<Step, Optional<Long>> {
     }
 
     /**
