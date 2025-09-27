@@ -1,6 +1,7 @@
 package org.sims;
 
 import java.io.*;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.function.*;
 
@@ -11,9 +12,9 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
      * Start the simulation
      *
      * @param onStep a callback called on each step, returning the idx to save
-     *               the step to, or null to skip saving.
+     *               the step to, or empty to skip saving.
      */
-    public void start(final Function<Step, Long> onStep) throws Exception {
+    public void start(final Function<Step, Optional<Long>> onStep) throws Exception {
         Resources.init();
         Resources.prepareDir("steps");
 
@@ -23,13 +24,7 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
 
         try (final var animator = Executors.newSingleThreadExecutor()) {
             animator.submit(new Animator(engine.initial(), 0L));
-
-            for (final var step : engine) {
-                final var filename = onStep.apply(step);
-                if (filename != null) {
-                    animator.submit(new Animator(step, filename));
-                }
-            }
+            engine.forEach(step -> onStep.apply(step).ifPresent(idx -> animator.submit(new Animator(step, idx))));
         }
     }
 

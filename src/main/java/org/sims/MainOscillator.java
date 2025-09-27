@@ -1,5 +1,7 @@
 package org.sims;
 
+import java.util.*;
+
 import org.sims.interfaces.Step;
 import org.sims.oscillator.*;
 
@@ -27,13 +29,8 @@ public class MainOscillator {
         }
     }
 
-    private static Long onStep(final Step step) {
+    private static Optional<Long> onStep(final Step step) {
         pb.step();
-
-        if (step.i() % SAVE_INTERVAL != 0) {
-            return null;
-        }
-
-        return step.i() / SAVE_INTERVAL;
+        return Optional.ofNullable(step.i() % SAVE_INTERVAL == 0 ? step.i() / SAVE_INTERVAL : null);
     }
 }
