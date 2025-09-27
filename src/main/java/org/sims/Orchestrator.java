@@ -38,6 +38,18 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
     }
 
     /**
+     * A simple OnStep implementation that skips saving every n steps
+     * and notifies a callback on each execution.
+     */
+    public record SkipSteps(long n, Runnable callback) implements OnStep {
+        @Override
+        public Optional<Long> apply(final Step step) {
+            callback.run();
+            return step.i() % n == 0 ? Optional.of(step.i() / n) : Optional.empty();
+        }
+    }
+
+    /**
      * Save a step with idx using an executor service
      */
     private static void save(final ExecutorService ex, final Step step, final Long idx) {

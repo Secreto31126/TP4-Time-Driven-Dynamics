@@ -1,8 +1,5 @@
 package org.sims;
 
-import java.util.*;
-
-import org.sims.interfaces.Step;
 import org.sims.oscillator.*;
 
 import me.tongfei.progressbar.ProgressBar;
@@ -22,15 +19,11 @@ public class MainOscillator {
 
         final var integrator = IntegratorPicker.pick(args[0]);
         final var simulation = OscillatorSimulation.build((long) (seconds / dt), dt, 1e4, 100, 70.0, integrator);
+        final var onStep = new Orchestrator.SkipSteps(SAVE_INTERVAL, pb::step);
 
         try (pb; final var engine = new OscillatorEngine(simulation)) {
             pb.maxHint(simulation.steps());
-            new Orchestrator(simulation, engine).start(MainOscillator::onStep);
+            new Orchestrator(simulation, engine).start(onStep);
         }
-    }
-
-    private static Optional<Long> onStep(final Step step) {
-        pb.step();
-        return Optional.ofNullable(step.i() % SAVE_INTERVAL == 0 ? step.i() / SAVE_INTERVAL : null);
     }
 }
