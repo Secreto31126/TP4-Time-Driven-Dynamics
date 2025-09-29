@@ -1,8 +1,11 @@
 package org.sims.integrals;
 
+import org.sims.interfaces.Force;
 import org.sims.interfaces.ForceCalculator;
 import org.sims.interfaces.Integrator;
+import org.sims.interfaces.Memory;
 import org.sims.models.Particle;
+import org.sims.models.Vector3;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,11 +14,11 @@ import java.util.Map;
 /**
  * Gear predictor-corrector for Forces that depend ONLY on position.
  */
-public class GearPositionIntegrator extends GearIntegrator implements Integrator {
+public class GearPositionIntegrator extends GearIntegrator implements Integrator<Particle<List<Double>>> {
 
     private double dt;
-    private ForceCalculator forceCalculator;
-    public GearPositionIntegrator(double dt, ForceCalculator forceCalculator){
+    private Force forceCalculator;
+    public GearPositionIntegrator(double dt, Force forceCalculator){
         this.dt = dt;
         this.forceCalculator = forceCalculator;
 
@@ -28,12 +31,22 @@ public class GearPositionIntegrator extends GearIntegrator implements Integrator
         ));
     }
 
-    @Override
-    public List<Particle> step(Collection<Particle> particles) {
+    /**
+     * Computes the variation of the particles' derivatives
+     *
+     * @return List of derivatives up to order 5
+     *
+     */
+    private List<Double> computeDerivatives(List<Double> prevDerivatives){
+        return prevDerivatives; //TODO do
+    }
 
-        for(Particle p : particles){
+
+    @Override
+    public List<Particle<List<Double>>> step(Collection<Particle<List<Double>>> entities) {
+        for(Particle p : entities){
             //1. Predict
-            List<Double> prevDerivatives = p.getDerivatives();
+            List<Double> prevDerivatives = p.memory();
             List<Double> predictedDerivatives = computeDerivatives(prevDerivatives);
 
             //2. Calculate forces
@@ -45,18 +58,8 @@ public class GearPositionIntegrator extends GearIntegrator implements Integrator
         return null;
     }
 
-    /**
-     * Computes the variation of the particles' derivatives
-     *
-     * @return List of derivatives up to order 5
-     *
-     */
-    private List<Double> computeDerivatives(List<Double> prevDerivatives){
-        return prevDerivatives; //TODO do
-    }
-
     @Override
     public String name() {
-        return "GearPosition";
+        return "Gear Position Integrator";
     }
 }

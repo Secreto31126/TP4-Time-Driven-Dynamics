@@ -9,6 +9,7 @@ public abstract class GearIntegrator{
     public Map<Integer, List<Double>> getGearCoefficients(){
         return gearCoefficients;
     }
+
     public void setGearCoefficients(Map<Integer,List<Double>> gearCoefficients){
         this.gearCoefficients = gearCoefficients;
     }
