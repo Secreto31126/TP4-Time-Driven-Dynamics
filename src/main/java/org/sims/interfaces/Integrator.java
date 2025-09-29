@@ -48,8 +48,9 @@ public interface Integrator<E extends Memory<?>> extends Named {
          * Initialize the entities' memories
          *
          * @param entities the entities to initialize
+         * @param dt       the time step
          * @return the initialized entities
          */
-        List<E> set(final Collection<E> entities);
+        List<E> set(final Collection<E> entities, double dt);
     }
 }

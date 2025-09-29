@@ -29,8 +29,13 @@ public record Verlet(double dt, Force<Particle<Vector3>> force) implements Integ
         }
 
         @Override
-        public List<Particle<Vector3>> set(Collection<Particle<Vector3>> particles) {
-            return particles.stream().map(p -> new Particle<>(p, p.position(), p.velocity(), p.position())).toList();
+        public List<Particle<Vector3>> set(Collection<Particle<Vector3>> particles, double dt) {
+            return particles.stream().map(p -> this.before(p, dt)).toList();
+        }
+
+        private Particle<Vector3> before(final Particle<Vector3> p, double dt) {
+            final var before = p.position().subtract(p.velocity().mult(dt));
+            return new Particle<>(p, p.position(), p.velocity(), before);
         }
     }
 

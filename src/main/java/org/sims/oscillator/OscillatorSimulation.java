@@ -25,7 +25,7 @@ public record OscillatorSimulation(long steps, double dt, List<Particle<?>> enti
             final Integrator.Constructor<Particle<?>> constructor) {
         final var force = new OscillatorForce(k, gamma, mass);
         final var integrator = constructor.get(dt, force);
-        final var entities = constructor.set(OscillatorSimulation.initial());
+        final var entities = constructor.set(OscillatorSimulation.initial(), dt);
 
         return new OscillatorSimulation(steps, dt, entities, force, integrator);
     }
