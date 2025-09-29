@@ -21,6 +21,9 @@ public interface Integrator<E extends Memory<?>> extends Named {
     /**
      * Advance the simulation by one time step
      *
+     * @implNote The integrator MUST NOT alter the collection
+     *           NOR the entities in it directly.
+     *
      * @param entities the entities to move
      * @return the moved entities
      */

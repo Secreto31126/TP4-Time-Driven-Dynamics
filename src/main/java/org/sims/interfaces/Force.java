@@ -15,6 +15,9 @@ import org.sims.models.*;
  * generally include information about position,
  * mass, velocity, charge, etc.
  *
+ * @implNote The force MUST NOT alter the collection
+ *           NOR the entities in it directly.
+ *
  * @param <E> The type of entities the force works with.
  */
 public interface Force<E> extends Function<Collection<E>, Map<E, Vector3>> {
