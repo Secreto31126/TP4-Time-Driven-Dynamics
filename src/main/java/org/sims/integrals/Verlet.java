@@ -18,7 +18,7 @@ public record Verlet(double dt, Force<Particle<Vector3>> force) implements Integ
             final var pos = a.add(b).add(c);
             final var vel = pos.subtract(p.memory()).div(2 * dt);
 
-            return new Particle<Vector3>(p, pos, vel, p.position());
+            return new Particle<>(p, pos, vel, p.position());
         }).toList();
     }
 
