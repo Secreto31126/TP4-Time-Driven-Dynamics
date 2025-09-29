@@ -5,7 +5,7 @@ import java.util.*;
 import org.sims.interfaces.*;
 import org.sims.models.*;
 
-public record Verlet(double dt, ForceCalculator<Particle<Vector3>> force) implements Integrator<Particle<Vector3>> {
+public record Verlet(double dt, Force<Particle<Vector3>> force) implements Integrator<Particle<Vector3>> {
     @Override
     public List<Particle<Vector3>> step(final Collection<Particle<Vector3>> particles) {
         final var acc = force.apply(particles);
@@ -24,7 +24,7 @@ public record Verlet(double dt, ForceCalculator<Particle<Vector3>> force) implem
 
     public static class Constructor implements Integrator.Constructor<Particle<Vector3>> {
         @Override
-        public Integrator<Particle<Vector3>> get(double dt, ForceCalculator<Particle<Vector3>> force) {
+        public Integrator<Particle<Vector3>> get(double dt, Force<Particle<Vector3>> force) {
             return new Verlet(dt, force);
         }
 

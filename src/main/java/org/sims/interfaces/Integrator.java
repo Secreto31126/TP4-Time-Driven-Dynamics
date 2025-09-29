@@ -27,7 +27,7 @@ public interface Integrator<E> extends Named {
          * @param force the force calculator
          * @return the integrator instance
          */
-        Integrator<E> get(double dt, ForceCalculator<E> force);
+        Integrator<E> get(double dt, Force<E> force);
 
         /**
          * Initialize the particles' memories

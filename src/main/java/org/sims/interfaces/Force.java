@@ -5,5 +5,5 @@ import java.util.function.*;
 
 import org.sims.models.*;
 
-public interface ForceCalculator<E> extends Function<Collection<E>, Map<E, Vector3>> {
+public interface Force<E> extends Function<Collection<E>, Map<E, Vector3>> {
 }
