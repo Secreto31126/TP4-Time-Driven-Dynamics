@@ -15,7 +15,7 @@ import java.util.*;
  * @param <S> the type of steps the simulation produces
  * @param <E> the type of the entities in the simulation
  */
-public interface Simulation<S extends Step, E> {
+public interface Simulation<S extends Step, E extends Memory<?>> {
     /**
      * The number of steps in the simulation
      *

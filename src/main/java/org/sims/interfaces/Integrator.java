@@ -17,7 +17,7 @@ import java.util.*;
  *
  * @param <E> the type of entities the integrator works with.
  */
-public interface Integrator<E> extends Named {
+public interface Integrator<E extends Memory<?>> extends Named {
     /**
      * Advance the simulation by one time step
      *
@@ -31,7 +31,7 @@ public interface Integrator<E> extends Named {
      *
      * @param <E> the type of entities the integrator works with
      */
-    public interface Constructor<E> {
+    public interface Constructor<E extends Memory<?>> {
         /**
          * Create an integrator instance
          *

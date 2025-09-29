@@ -2,7 +2,7 @@ package org.sims.models;
 
 import java.util.*;
 
-import org.sims.interfaces.Named;
+import org.sims.interfaces.*;
 
 /**
  * A particle in 2D space with position, velocity, and radius.
@@ -14,7 +14,7 @@ import org.sims.interfaces.Named;
  *
  * @param <M> The type of memory the particle will save.
  */
-public record Particle<M>(long ID, Vector3 position, Vector3 velocity, double radius, M memory) implements Named {
+public record Particle<M>(long ID, Vector3 position, Vector3 velocity, double radius, M memory) implements Named, Memory<M> {
     private static long SERIAL = 0L;
 
     /**
