@@ -1,17 +1,21 @@
 package org.sims;
 
-import java.util.*;
-
 import org.sims.integrals.*;
 import org.sims.interfaces.*;
+import org.sims.interfaces.Integrator.Constructor;
+import org.sims.models.*;
 
-public abstract class IntegratorPicker {
-    private static final Map<String, Integrator.Constructor> INTEGRATORS = Map.of(
-            // "beeman", Beeman.class,
-            // "gear", GearPredictorCorrector.class,
-            "verlet", Verlet::new);
+public enum IntegratorPicker {
+    VERLET(new Verlet.Constructor());
 
-    public static Integrator.Constructor pick(final String name) {
-        return INTEGRATORS.getOrDefault(name.toLowerCase(), Verlet::new);
+    private final Integrator.Constructor<? extends Particle<?>> integrator;
+
+    IntegratorPicker(Integrator.Constructor<? extends Particle<?>> integrator) {
+        this.integrator = integrator;
+    }
+
+    @SuppressWarnings("unchecked") // I got sick of Java's generics :]
+    public static Integrator.Constructor<Particle<?>> pick(final String name) {
+        return (Constructor<Particle<?>>) IntegratorPicker.valueOf(name.toUpperCase()).integrator;
     }
 }

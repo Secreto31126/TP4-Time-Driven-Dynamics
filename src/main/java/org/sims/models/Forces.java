@@ -13,7 +13,7 @@ public abstract class Forces {
      * @param p2 The second particle
      * @return The force exerted by p2 on p1
      */
-    public static Vector3 gravity(final Particle p1, final Particle p2) {
+    public static Vector3 gravity(final Particle<?> p1, final Particle<?> p2) {
         final var rij = p1.position().subtract(p2.position());
         final var r2 = rij.norm2();
         final var factor = -Math.pow(r2 + H * H, 1.5);
@@ -29,7 +29,7 @@ public abstract class Forces {
      * @param mass  The mass of the particle
      * @return
      */
-    public static Vector3 oscillator(final Particle p, final double k, final double gamma, final double mass) {
+    public static Vector3 oscillator(final Particle<?> p, final double k, final double gamma, final double mass) {
         return p.position()
                 .mult(-k)
                 .subtract(p.velocity().mult(gamma))

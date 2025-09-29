@@ -1,9 +1,13 @@
 package org.sims.interfaces;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Simulations define the setup and parameters for a simulation run.
+ *
+ * @param <S> the type of steps the simulation produces
+ * @param <E> the type of the entities in the simulation
  */
 public interface Simulation<S extends Step, E> {
     /**
@@ -14,18 +18,18 @@ public interface Simulation<S extends Step, E> {
     long steps();
 
     /**
-     * The entities involved in the simulation
+     * The entities in the simulation
      *
-     * @return A collection of entities
+     * @return The entities
      */
-    E entities();
+    List<E> entities();
 
     /**
      * The integrator used in the simulation
      *
      * @return The integrator
      */
-    Integrator integrator();
+    Integrator<E> integrator();
 
     /**
      * Save the simulation setup to a writer

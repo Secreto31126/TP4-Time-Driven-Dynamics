@@ -8,29 +8,18 @@ import java.util.stream.*;
 import org.sims.interfaces.*;
 import org.sims.models.*;
 
-public class OscillatorSimulation implements Simulation<OscillatorStep, Particle> {
-    private final long steps;
-    private final double dt;
-    private final Particle entities;
-    private final double k;
-    private final double gamma;
-    private final double mass;
-    private final Integrator integrator;
-
-    private OscillatorSimulation(final long steps, final double dt, final Particle entities,
+public record OscillatorSimulation(
+        long steps, double dt, List<Particle<?>> entities, double k, double gamma, double mass,
+        Integrator<Particle<?>> integrator)
+        implements Simulation<OscillatorStep, Particle<?>> {
+    private OscillatorSimulation(final long steps, final double dt, final List<Particle<?>> entities,
             final double k, final double gamma, final double mass,
-            final Integrator.Constructor constructor) {
-        this.steps = steps;
-        this.dt = dt;
-        this.entities = entities;
-        this.k = k;
-        this.mass = mass;
-        this.gamma = gamma;
-        this.integrator = constructor.get(dt, this::oscillate);
+            final Integrator.Constructor<Particle<?>> constructor) {
+        this(steps, dt, entities, k, gamma, mass, constructor.get(dt, new Force(k, gamma, mass)));
     }
 
     /**
-     * Build a simulation
+     * Build a oscillation simulation
      *
      * @param constructor the integrator to use
      * @param steps       the number of steps to simulate
@@ -42,14 +31,14 @@ public class OscillatorSimulation implements Simulation<OscillatorStep, Particle
      */
     public static OscillatorSimulation build(final long steps, final double dt,
             final double k, final double gamma, final double mass,
-            final Integrator.Constructor constructor) {
-        final var p = new Particle(
-                new Vector3(1, 0, 0),
-                Vector3.ZERO,
-                1,
-                dt);
+            final Integrator.Constructor<Particle<?>> constructor) {
+        final var entities = constructor.set(List.of(
+                new Particle<>(
+                        new Vector3(1, 0, 0),
+                        Vector3.ZERO,
+                        1)));
 
-        return new OscillatorSimulation(steps, dt, p, k, gamma, mass, constructor);
+        return new OscillatorSimulation(steps, dt, entities, k, gamma, mass, constructor);
     }
 
     @Override
@@ -59,24 +48,12 @@ public class OscillatorSimulation implements Simulation<OscillatorStep, Particle
                 steps, dt, k, gamma, mass, integrator.name()));
     }
 
-    private Map<Particle, Vector3> oscillate(final Collection<Particle> particles) {
-        return particles.stream().collect(Collectors.toMap(Function.identity(), p -> {
-            return Forces.oscillator(p, k, gamma, mass);
-        }));
-    }
-
-    @Override
-    public long steps() {
-        return steps;
-    }
-
-    @Override
-    public Particle entities() {
-        return entities;
-    }
-
-    @Override
-    public Integrator integrator() {
-        return integrator;
+    private record Force(double k, double gamma, double mass) implements ForceCalculator<Particle<?>> {
+        @Override
+        public Map<Particle<?>, Vector3> apply(final Collection<Particle<?>> particles) {
+            return particles.stream().collect(Collectors.toMap(Function.identity(), p -> {
+                return Forces.oscillator(p, k, gamma, mass);
+            }));
+        }
     }
 }
