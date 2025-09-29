@@ -4,7 +4,13 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Simulations define the setup and parameters for a simulation run.
+ * Simulations defines the setup and parameters for a simulation run.
+ *
+ * @apiNote As the responsible of storing the simulation state,
+ * it must know the steps type, the entities type and the
+ * ForceCalculator implementation, so it's strongly encouraged
+ * to add a static build() method that creates all the data,
+ * and a record Force() implementing ForceCalculator<E>.
  *
  * @param <S> the type of steps the simulation produces
  * @param <E> the type of the entities in the simulation

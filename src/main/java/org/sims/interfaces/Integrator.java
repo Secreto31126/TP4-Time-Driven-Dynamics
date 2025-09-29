@@ -3,7 +3,19 @@ package org.sims.interfaces;
 import java.util.*;
 
 /**
- * @param <E> the type of entities the integrator works with
+ * Integrators are the mathematical implementations of the
+ * time evolution algorithms, such as Verlet, or Beeman.
+ *
+ * As the responsible of moving the entities, it must know
+ * the entities type and the memory they need to save,
+ * hence the existance of a nested Constructor interface.
+ *
+ * Constructor requires the user to provide a static class
+ * that creates the integrator instance and initializes
+ * the entities' memories as deemed necesary by the
+ * algorithm.
+ *
+ * @param <E> the type of entities the integrator works with.
  */
 public interface Integrator<E> extends Named {
     /**
