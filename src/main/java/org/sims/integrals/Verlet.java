@@ -8,8 +8,7 @@ import org.sims.models.*;
 public record Verlet(double dt, ForceCalculator<Particle<Vector3>> force) implements Integrator<Particle<Vector3>> {
     @Override
     public List<Particle<Vector3>> step(final Collection<Particle<Vector3>> particles) {
-        final var list = List.copyOf(particles);
-        final var acc = force.apply(list);
+        final var acc = force.apply(particles);
 
         return particles.stream().map(p -> {
             final var a = p.position().mult(2);
