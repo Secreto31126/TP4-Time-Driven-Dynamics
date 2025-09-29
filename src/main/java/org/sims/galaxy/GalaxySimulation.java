@@ -6,7 +6,8 @@ import java.util.List;
 import org.sims.interfaces.*;
 import org.sims.models.*;
 
-public record GalaxySimulation(long steps, List<Particle> entities, Integrator integrator) implements Simulation<GalaxyStep, List<Particle>> {
+public record GalaxySimulation(long steps, List<Particle<?>> entities, Integrator<Particle<?>> integrator)
+        implements Simulation<Particle<?>, GalaxyStep> {
     /**
      * Build a simulation
      *

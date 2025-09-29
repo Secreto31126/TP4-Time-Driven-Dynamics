@@ -2,7 +2,10 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+import os
+
 import frames
+import resources
 from streaming import SequentialStreamingExecutor as Executor
 
 M = 70.0
@@ -16,20 +19,34 @@ def solution(t: np.ndarray):
     x = np.exp(t * -beta) * np.cos(wd * t)
     return x
 
+def ecm(sim: np.ndarray, sol: np.ndarray):
+    return np.mean((sim - sol) ** 2)
+
 def main(seconds: float):
     executor = Executor(frames.next, range(frames.count()))
 
     t = np.linspace(0, seconds, frames.count())
 
-    data: list[float] = []
-    for particles in executor.stream():
-        p = particles[0]
-        data.append(p.position.x)
+    with open(resources.path("setup.txt"), "r") as f:
+        line = f.readline().strip().split(' ')
+        dt = float(line[1])
+        integral = line[-1]
 
-    return data, solution(t), t
+    sim = np.array([])
+    for particles in executor.stream():
+        sim = np.append(sim, particles[0].position.x)
+
+    sol = solution(t)
+    err = ecm(sim, sol)
+
+    return sim, sol, err, t, dt, integral
 
 if __name__ == "__main__":
-    sim, sol, t = main(5)
+    sim, sol, err, t, dt, integral = main(5)
+
+    os.makedirs(resources.path('osc-error', integral), exist_ok=True)
+    with open(resources.path('osc-error', integral, f'{dt}.txt'), 'w') as f:
+        f.write(f"{err}\n")
 
     plt.plot(t, sol, ls='--', lw=3) # pyright: ignore[reportUnknownMemberType]
     plt.plot(t, sim) # pyright: ignore[reportUnknownMemberType]
@@ -43,4 +60,6 @@ if __name__ == "__main__":
     plt.ylim(-1.1, 1.1) # pyright: ignore[reportUnknownMemberType]
 
     plt.legend(["Solución analítica", "Simulación"], fontsize=20) # pyright: ignore[reportUnknownMemberType]
+
+    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.1)
     plt.show() # pyright: ignore[reportUnknownMemberType]

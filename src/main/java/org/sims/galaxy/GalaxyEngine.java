@@ -12,7 +12,7 @@ public record GalaxyEngine(GalaxySimulation simulation) implements Engine<Galaxy
 
     @Override
     public Iterator<GalaxyStep> iterator() {
-        return new Iterator<GalaxyStep>() {
+        return new Iterator<>() {
             private long current = 0;
 
             @Override

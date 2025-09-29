@@ -1,6 +1,8 @@
 package org.sims;
 
 import java.io.*;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.*;
 
@@ -8,12 +10,17 @@ import org.sims.interfaces.*;
 
 public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
     /**
-     * Start the simulation
+     * Start the simulation.
      *
-     * @param onStep a callback called on each step, returning the idx to save
-     *               the step to, or null to skip saving.
+     * OnStep is called on each step and can be used
+     * to filter which steps to save.
+     *
+     * @apiNote Saves the setup and steps in the "steps" directory.
+     * @apiNote The step 0 is always saved.
+     *
+     * @param onStep The OnStep event handler.
      */
-    public void start(final Function<Step, Long> onStep) throws Exception {
+    public void start(final OnStep onStep) throws Exception {
         Resources.init();
         Resources.prepareDir("steps");
 
@@ -21,16 +28,38 @@ public record Orchestrator(Simulation<?, ?> simulation, Engine<?> engine) {
             simulation.saveTo(writer);
         }
 
-        try (final var animator = Executors.newSingleThreadExecutor()) {
-            animator.submit(new Animator(engine.initial(), 0L));
-
-            for (final var step : engine) {
-                final var filename = onStep.apply(step);
-                if (filename != null) {
-                    animator.submit(new Animator(step, filename));
-                }
-            }
+        try (final var animator = Executors.newFixedThreadPool(3)) {
+            save(animator, engine.initial(), 0L);
+            engine.forEach(step -> onStep.apply(step).ifPresent(idx -> save(animator, step, idx)));
         }
+    }
+
+    /**
+     * A function called on each step.
+     *
+     * Returning empty optionals allow the caller to skip saving steps.
+     * Similar to a filter, but it requires the idx to save to.
+     */
+    public interface OnStep extends Function<Step, Optional<Long>> {
+    }
+
+    /**
+     * A simple OnStep implementation that skips saving every n steps
+     * and notifies a callback on each execution.
+     */
+    public record SkipSteps(long n, Runnable callback) implements OnStep {
+        @Override
+        public Optional<Long> apply(final Step step) {
+            callback.run();
+            return step.i() % n == 0 ? Optional.of(step.i() / n) : Optional.empty();
+        }
+    }
+
+    /**
+     * Save a step with idx using an executor service
+     */
+    private static void save(final ExecutorService ex, final Step step, final Long idx) {
+        ex.submit(new Animator(step, idx));
     }
 
     /**
