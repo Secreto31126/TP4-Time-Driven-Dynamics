@@ -8,7 +8,7 @@ import org.sims.models.*;
 
 public record OscillatorSimulation(long steps, double dt, List<Particle<?>> entities, OscillatorForce force,
         Integrator<Particle<?>> integrator)
-        implements Simulation<OscillatorStep, Particle<?>> {
+        implements Simulation<Particle<?>, OscillatorStep> {
     /**
      * Build a oscillation simulation
      *

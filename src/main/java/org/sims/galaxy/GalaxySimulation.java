@@ -7,7 +7,7 @@ import org.sims.interfaces.*;
 import org.sims.models.*;
 
 public record GalaxySimulation(long steps, List<Particle<?>> entities, Integrator<Particle<?>> integrator)
-        implements Simulation<GalaxyStep, Particle<?>> {
+        implements Simulation<Particle<?>, GalaxyStep> {
     /**
      * Build a simulation
      *
