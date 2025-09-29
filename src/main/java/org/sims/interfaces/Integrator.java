@@ -21,10 +21,10 @@ public interface Integrator<E> extends Named {
     /**
      * Advance the simulation by one time step
      *
-     * @param particles the particles to move
-     * @return the moved particles
+     * @param entities the entities to move
+     * @return the moved entities
      */
-    List<E> step(final Collection<E> particles);
+    List<E> step(final Collection<E> entities);
 
     /**
      * A constructor for integrators
@@ -42,11 +42,11 @@ public interface Integrator<E> extends Named {
         Integrator<E> get(double dt, Force<E> force);
 
         /**
-         * Initialize the particles' memories
+         * Initialize the entities' memories
          *
-         * @param particles the particles to initialize
-         * @return the initialized particles
+         * @param entities the entities to initialize
+         * @return the initialized entities
          */
-        List<E> set(final Collection<E> particles);
+        List<E> set(final Collection<E> entities);
     }
 }
