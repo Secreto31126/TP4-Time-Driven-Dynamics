@@ -2,13 +2,11 @@ package org.sims.oscillator;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
 
 import org.sims.interfaces.*;
 import org.sims.models.*;
 
-public record OscillatorSimulation(long steps, double dt, List<Particle<?>> entities, Force force,
+public record OscillatorSimulation(long steps, double dt, List<Particle<?>> entities, OscillatorForce force,
         Integrator<Particle<?>> integrator)
         implements Simulation<OscillatorStep, Particle<?>> {
     /**
@@ -26,7 +24,7 @@ public record OscillatorSimulation(long steps, double dt, List<Particle<?>> enti
             final double k, final double gamma, final double mass,
             final Integrator.Constructor<Particle<?>> constructor) {
         //
-        final var force = new Force(k, gamma, mass);
+        final var force = new OscillatorForce(k, gamma, mass);
         final var integrator = constructor.get(dt, force);
         final var entities = constructor.set(List.of(
                 new Particle<>(
@@ -42,14 +40,5 @@ public record OscillatorSimulation(long steps, double dt, List<Particle<?>> enti
         writer.write(String.format(Locale.US,
                 "%d %.14f %.14f %.14f %.14f %s\n",
                 steps, dt, force.k(), force.gamma(), force.mass(), integrator.name()));
-    }
-
-    private record Force(double k, double gamma, double mass) implements ForceCalculator<Particle<?>> {
-        @Override
-        public Map<Particle<?>, Vector3> apply(final Collection<Particle<?>> particles) {
-            return particles.stream().collect(Collectors.toMap(Function.identity(), p -> {
-                return Forces.oscillator(p, k, gamma, mass);
-            }));
-        }
     }
 }
