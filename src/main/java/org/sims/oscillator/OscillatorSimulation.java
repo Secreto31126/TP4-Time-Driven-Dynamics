@@ -8,8 +8,7 @@ import java.util.stream.*;
 import org.sims.interfaces.*;
 import org.sims.models.*;
 
-public record OscillatorSimulation(
-        long steps, double dt, List<Particle<?>> entities, double k, double gamma, double mass,
+public record OscillatorSimulation(long steps, double dt, List<Particle<?>> entities, Force force,
         Integrator<Particle<?>> integrator)
         implements Simulation<OscillatorStep, Particle<?>> {
     /**
@@ -35,14 +34,14 @@ public record OscillatorSimulation(
                         Vector3.ZERO,
                         1)));
 
-        return new OscillatorSimulation(steps, dt, entities, k, gamma, mass, integrator);
+        return new OscillatorSimulation(steps, dt, entities, force, integrator);
     }
 
     @Override
     public void saveTo(Writer writer) throws IOException {
         writer.write(String.format(Locale.US,
                 "%d %.14f %.14f %.14f %.14f %s\n",
-                steps, dt, k, gamma, mass, integrator.name()));
+                steps, dt, force.k(), force.gamma(), force.mass(), integrator.name()));
     }
 
     private record Force(double k, double gamma, double mass) implements ForceCalculator<Particle<?>> {
