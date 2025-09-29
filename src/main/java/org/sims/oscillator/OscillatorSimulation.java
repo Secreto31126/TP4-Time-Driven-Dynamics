@@ -12,12 +12,6 @@ public record OscillatorSimulation(
         long steps, double dt, List<Particle<?>> entities, double k, double gamma, double mass,
         Integrator<Particle<?>> integrator)
         implements Simulation<OscillatorStep, Particle<?>> {
-    private OscillatorSimulation(final long steps, final double dt, final List<Particle<?>> entities,
-            final double k, final double gamma, final double mass,
-            final Integrator.Constructor<Particle<?>> constructor) {
-        this(steps, dt, entities, k, gamma, mass, constructor.get(dt, new Force(k, gamma, mass)));
-    }
-
     /**
      * Build a oscillation simulation
      *
@@ -32,13 +26,16 @@ public record OscillatorSimulation(
     public static OscillatorSimulation build(final long steps, final double dt,
             final double k, final double gamma, final double mass,
             final Integrator.Constructor<Particle<?>> constructor) {
+        //
+        final var force = new Force(k, gamma, mass);
+        final var integrator = constructor.get(dt, force);
         final var entities = constructor.set(List.of(
                 new Particle<>(
                         new Vector3(1, 0, 0),
                         Vector3.ZERO,
                         1)));
 
-        return new OscillatorSimulation(steps, dt, entities, k, gamma, mass, constructor);
+        return new OscillatorSimulation(steps, dt, entities, k, gamma, mass, integrator);
     }
 
     @Override
