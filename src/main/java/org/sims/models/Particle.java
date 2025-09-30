@@ -12,10 +12,15 @@ import org.sims.interfaces.*;
  * Particles can optionally store a memory of type M, which
  * can save algorithm-specific data between iterations.
  *
- * @param <M> The type of memory the particle will save.
  */
-public record Particle<M>(long ID, Vector3 position, Vector3 velocity, double radius, M memory) implements Named, Memory<M> {
+public class Particle implements Named{
     private static long SERIAL = 0L;
+    private final long ID;
+    private Vector3 position;
+    private Vector3 velocity;
+    private final double radius;
+    private Vector3 memory;
+    private List<Double> derivatives;
 
     /**
      * Create a new particle with a unique ID.
@@ -25,8 +30,12 @@ public record Particle<M>(long ID, Vector3 position, Vector3 velocity, double ra
      * @param radius   The radius of the particle
      * @param memory   The algorithm-specific data
      */
-    private Particle(final Vector3 position, final Vector3 velocity, final double radius, final M memory) {
-        this(SERIAL++, position, velocity, radius, memory);
+    private Particle(final Vector3 position, final Vector3 velocity, final double radius, final Vector3 memory) {
+        this.ID = SERIAL++;
+        this.position = position;
+        this.velocity = velocity;
+        this.radius = radius;
+        this.memory = memory;
     }
 
     /**
@@ -49,12 +58,73 @@ public record Particle<M>(long ID, Vector3 position, Vector3 velocity, double ra
      * @param p      The particle to copy
      * @param pos    The new position
      * @param vel    The new velocity
-     * @param memory The new memory
      */
-    public Particle(final Particle<M> p, final Vector3 pos, final Vector3 vel, final M memory) {
-        this(p.ID, pos, vel, p.radius, memory);
+    public Particle(final Particle p, final Vector3 pos, final Vector3 vel) {
+        this.ID = p.ID;
+        this.position = pos;
+        this.velocity = vel;
+        this.radius = p.radius;
+        this.derivatives = initializeDerivatives(pos, velocity);
+
     }
 
+    public Particle(Particle p, List<Double> derivatives) {
+        this(p, p.getPosition(), p.getVelocity());
+        this.derivatives = derivatives;
+    }
+
+    private List<Double> initializeDerivatives(Vector3 position, Vector3 velocity){
+        List<Double> derivatives = new ArrayList<>();
+        derivatives.add(position.x());
+        derivatives.add(velocity.x());
+        derivatives.add(0.0);
+        derivatives.add(0.0);
+        derivatives.add(0.0);
+        derivatives.add(0.0);
+        return derivatives;
+    }
+    public List<Double> getDerivatives() {
+        return derivatives;
+    }
+    public void setDerivatives(List<Double> derivatives) {
+        this.derivatives = derivatives;
+    }
+
+    public long getID() {
+        return ID;
+    }
+
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    public Vector3 getVelocity() {
+        return velocity;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public Vector3 getMemory() {
+        return memory;
+    }
+
+    public void setPosition(Vector3 position) {
+        this.position = position;
+    }
+
+    public void setVelocity(Vector3 velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setMemory(Vector3 memory) {
+        this.memory = memory;
+    }
+
+    public Particle getParticle(long ID){
+        return this.ID == ID ? this : null;
+    }
     /**
      * Compute the gravitational force exerted by
      * the universe of particles on the particle
@@ -62,7 +132,7 @@ public record Particle<M>(long ID, Vector3 position, Vector3 velocity, double ra
      * @param particles The universe of particles
      * @return The total gravitational force exerted on this particle
      */
-    public Vector3 gravity(final Collection<Particle<M>> particles) {
+    public Vector3 gravity(final Collection<Particle> particles) {
         return particles.parallelStream()
                 .filter(p -> p.ID != this.ID)
                 .map(p -> Forces.gravity(this, p))

@@ -5,7 +5,7 @@ import java.util.*;
 import org.sims.interfaces.*;
 import org.sims.models.*;
 
-public record OscillatorEngine(Simulation<Particle<?>, OscillatorStep> simulation) implements Engine<OscillatorStep> {
+public record OscillatorEngine(Simulation<Particle, OscillatorStep> simulation) implements Engine<OscillatorStep> {
     @Override
     public OscillatorStep initial() {
         return new OscillatorStep(0, simulation.entities().getFirst());
@@ -15,7 +15,7 @@ public record OscillatorEngine(Simulation<Particle<?>, OscillatorStep> simulatio
     public Iterator<OscillatorStep> iterator() {
         return new Iterator<>() {
             private long current = 0;
-            private List<Particle<?>> p = simulation.entities();
+            private List<Particle> p = simulation.entities();
 
             @Override
             public boolean hasNext() {

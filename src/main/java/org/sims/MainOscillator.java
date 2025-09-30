@@ -1,5 +1,8 @@
 package org.sims;
 
+import org.sims.integrals.GearPositionIntegrator;
+import org.sims.interfaces.Force;
+import org.sims.models.Particle;
 import org.sims.oscillator.*;
 
 import me.tongfei.progressbar.ProgressBar;
@@ -16,7 +19,8 @@ public class MainOscillator {
         final var seconds = 5.0;
         final var dt = Double.parseDouble(args[1]);
 
-        final var integrator = IntegratorPicker.pick(args[0]);
+//        final var integrator = IntegratorPicker.pick(args[0]);
+        final var integrator = new GearPositionIntegrator.Constructor();
         final var simulation = OscillatorSimulation.build((long) (seconds / dt), dt, 1e4, 100, 70.0, integrator);
 
         final var pb = new ProgressBar("Oscillating", simulation.steps());

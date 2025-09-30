@@ -13,8 +13,8 @@ public abstract class Forces {
      * @param p2 The second particle
      * @return The force exerted by p2 on p1
      */
-    public static Vector3 gravity(final Particle<?> p1, final Particle<?> p2) {
-        final var rij = p1.position().subtract(p2.position());
+    public static Vector3 gravity(final Particle p1, final Particle p2) {
+        final var rij = p1.getPosition().subtract(p2.getPosition());
         final var r2 = rij.norm2();
         final var factor = -Math.pow(r2 + H * H, 1.5);
         return rij.div(factor);
@@ -24,15 +24,15 @@ public abstract class Forces {
      * Harmonic oscillation force
      *
      * @param p     The particle
-     * @param k     TODO: Idk
+     * @param k     Spring constant
      * @param gamma The damping coefficient
      * @param mass  The mass of the particle
      * @return
      */
-    public static Vector3 oscillator(final Particle<?> p, final double k, final double gamma, final double mass) {
-        return p.position()
+    public static Vector3 oscillator(final Particle p, final double k, final double gamma, final double mass) {
+        return p.getPosition()
                 .mult(-k)
-                .subtract(p.velocity().mult(gamma))
+                .subtract(p.getVelocity().mult(gamma))
                 .div(mass);
     }
 }
