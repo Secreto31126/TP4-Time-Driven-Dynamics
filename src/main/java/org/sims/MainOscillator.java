@@ -1,6 +1,8 @@
 package org.sims;
 
+import com.google.gson.Gson;
 import org.sims.integrals.GearPositionIntegrator;
+import org.sims.integrals.Verlet;
 import org.sims.interfaces.Force;
 import org.sims.interfaces.Integrator;
 import org.sims.models.Particle;
@@ -9,22 +11,30 @@ import org.sims.oscillator.*;
 
 import me.tongfei.progressbar.ProgressBar;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainOscillator {
-    private static final long SAVE_INTERVAL = 10L;
 
     public static void main(final String[] args) throws Exception {
-        final double dt = Double.parseDouble(args[1]);
-        final String integrator = args[0];
-        //TODO parse from json
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, Object>>() {}.getType();
+        FileReader reader = new FileReader("src/main/resources/params.json");
+        Map<String, Object> params = gson.fromJson(reader, type);
+
+        final double dt = (double) params.get("dt");
+        final String integrator = params.get("integrator").toString();
+        System.out.println(integrator);
+        for(var entry : params.entrySet()){
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+
         new Simulator(dt, integrator, 1.0, 0.2, 1.0).simulate();
     }
 
@@ -60,7 +70,8 @@ class Simulator{
                 //TODO
                 break;
             case "verlet":
-                //TODO
+                integrator = new Verlet(dt, force);
+                integratorName = "Verlet";
                 break;
             default:
                 System.out.println("Unknown integration method: " + integrationMethod);
@@ -68,7 +79,7 @@ class Simulator{
                 System.exit(1);
         }
 
-        File file = new File("steps/output.txt");
+        File file = new File("sim/steps/output.txt");
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         writer.write(String.format(Locale.US,"%d %.14f %.14f %.14f %.14f %s\n",
                 steps, dt, force.k(), force.gamma(), force.mass(), integratorName));
