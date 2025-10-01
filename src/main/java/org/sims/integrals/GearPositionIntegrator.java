@@ -101,7 +101,7 @@ public class GearPositionIntegrator extends GearIntegrator implements Integrator
     }
     @Override
     public String name() {
-        return "Gear Position Integrator";
+        return "GearPositionIntegrator";
     }
 
     public static class Constructor implements Integrator.Constructor<Particle> {
