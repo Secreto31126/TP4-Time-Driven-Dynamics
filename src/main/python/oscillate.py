@@ -4,6 +4,8 @@ import numpy as np
 
 import os
 
+from tqdm import tqdm
+
 import frames
 import resources
 from streaming import SequentialStreamingExecutor as Executor
@@ -33,7 +35,7 @@ def main(seconds: float):
         integral = line[-1]
 
     sim = np.array([])
-    for particles in executor.stream():
+    for particles in tqdm(executor.stream(), total=frames.count()):
         sim = np.append(sim, particles[0].position.x)
 
     sol = solution(t)
