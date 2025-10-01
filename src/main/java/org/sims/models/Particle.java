@@ -46,7 +46,7 @@ public class Particle implements Named{
      * @param radius   The radius of the particle
      */
     public Particle(final Vector3 position, final Vector3 velocity, final double radius) {
-        this(position, velocity, radius, null);
+        this(position, velocity, radius, position);
     }
 
     /**
@@ -147,5 +147,20 @@ public class Particle implements Named{
     @Override
     public String toString() {
         return "%s %s".formatted(position, velocity);
+    }
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Particle o))
+            return false;
+
+        return ID == o.ID;
+    }
+
+    @Override
+    public final int hashCode() {
+        return Long.hashCode(ID);
     }
 }

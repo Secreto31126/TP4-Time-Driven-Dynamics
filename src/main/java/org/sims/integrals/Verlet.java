@@ -18,7 +18,9 @@ public record Verlet(double dt, Force<Particle> force) implements Integrator<Par
             final var pos = a.add(b).add(c);
             final var vel = pos.subtract(p.getMemory()).div(2 * dt);
 
-            return new Particle(p, pos, vel);
+            Particle next = new Particle(p, pos, vel);
+            next.setMemory(p.getPosition());
+            return next;
         }).toList();
     }
 
