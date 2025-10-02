@@ -1,9 +1,9 @@
 {
-  "steps": 500,
-  "dt": 0.01,
+  "steps": 5000,
+  "dt": 0.001,
   "integrator": "verlet",
-  "spring_constant": 0.1,
-  "damping_coefficient": 0.05,
-  "mass": 1.0
+  "spring_constant": 1e4,
+  "damping_coefficient": 100.0,
+  "mass": 70.0
 
 }

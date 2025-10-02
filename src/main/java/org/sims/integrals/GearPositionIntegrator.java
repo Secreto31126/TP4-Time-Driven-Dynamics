@@ -62,8 +62,15 @@ public class GearPositionIntegrator extends GearIntegrator implements Integrator
 
     private List<Particle> correctParticles(Map<Particle, Vector3> newParticles, Collection<Particle> oldParticles){
         //1.Acceleration
-        //m=1 -> F=a
-        Map<Particle, Vector3> newAccelerations = newParticles;
+        //a = F/m
+        double mass = 70.0;
+        Map<Particle, Vector3> newAccelerations = newParticles.entrySet().stream().map(entry->{
+            var force = entry.getValue();
+            var particle = entry.getKey();
+            var acceleration = force.div(mass);
+            entry.setValue(acceleration);
+            return entry;
+        }).collect(HashMap::new, (m,e)->m.put(e.getKey(), e.getValue()), HashMap::putAll);
 
        List<Particle> correctedParticles = new ArrayList<>();
         for(Map.Entry<Particle, Vector3> entry : newAccelerations.entrySet()){

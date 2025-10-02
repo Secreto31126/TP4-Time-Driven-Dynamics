@@ -52,8 +52,9 @@ class Simulator{
         this.dt = dt;
         this.integrationMethod = integrationMethod;
         this.force = new OscillatorForce(springConstant, dampingCoefficient, mass);
-        this.steps = (long) (steps / dt);
+        this.steps = (long) steps;
     }
+
 
     public void simulate() throws IOException {
         Integrator<Particle> integrator = null;
