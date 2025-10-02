@@ -20,7 +20,10 @@ public class Particle implements Named{
     private Vector3 velocity;
     private final double radius;
     private Vector3 memory;
-    private List<Double> derivatives;
+    private List<Vector3> derivatives;
+    private static final double DEFAULT_SPRING_CONSTANT = 10.0;
+    private static final double DEFAULT_PARTICLE_MASS = 1.0;
+    private static final double DEFAULT_DAMPENING_CONSTANT = 1.0;
 
     /**
      * Create a new particle with a unique ID.
@@ -36,6 +39,7 @@ public class Particle implements Named{
         this.velocity = velocity;
         this.radius = radius;
         this.memory = memory;
+        this.derivatives = initializeDerivatives(position, velocity, DEFAULT_SPRING_CONSTANT, DEFAULT_PARTICLE_MASS, DEFAULT_DAMPENING_CONSTANT);
     }
 
     /**
@@ -64,29 +68,34 @@ public class Particle implements Named{
         this.position = pos;
         this.velocity = vel;
         this.radius = p.radius;
-        this.derivatives = initializeDerivatives(pos, velocity);
+        this.derivatives = initializeDerivatives(pos, velocity, DEFAULT_SPRING_CONSTANT, DEFAULT_PARTICLE_MASS, DEFAULT_DAMPENING_CONSTANT);
 
     }
 
-    public Particle(Particle p, List<Double> derivatives) {
-        this(p, p.getPosition(), p.getVelocity());
+    public Particle(Particle p, List<Vector3> derivatives) {
+        //replaciong position and velocity by derivatives 0 and 1 -> same thing but updated
+        this(p, derivatives.get(0), derivatives.get(1));
         this.derivatives = derivatives;
     }
 
-    private List<Double> initializeDerivatives(Vector3 position, Vector3 velocity){
-        List<Double> derivatives = new ArrayList<>();
-        derivatives.add(position.x());
-        derivatives.add(velocity.x());
-        derivatives.add(0.0);
-        derivatives.add(0.0);
-        derivatives.add(0.0);
-        derivatives.add(0.0);
+    private List<Vector3> initializeDerivatives(Vector3 position, Vector3 velocity, double springConstant, double particleMass, double dampeningConstant){
+        double k = springConstant;
+        double m = particleMass;
+        double gamma = dampeningConstant;
+        Vector3 r0 = position;
+        Vector3 r1 = velocity;
+        Vector3 r2 = r0.mult(-k/m).add(r1.mult(-gamma/m));
+        Vector3 r3 = r1.mult(-k/m).add(r2.mult(-gamma/m));
+        Vector3 r4 = r2.mult(-k/m).add(r3.mult(-gamma/m));
+        Vector3 r5 = r3.mult(-k/m).add(r4.mult(-gamma/m));
+
+        return List.of(r0, r1, r2, r3, r4, r5);
+
+    }
+    public List<Vector3> getDerivatives() {
         return derivatives;
     }
-    public List<Double> getDerivatives() {
-        return derivatives;
-    }
-    public void setDerivatives(List<Double> derivatives) {
+    public void setDerivatives(List<Vector3> derivatives) {
         this.derivatives = derivatives;
     }
 

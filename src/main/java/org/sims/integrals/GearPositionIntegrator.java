@@ -29,20 +29,21 @@ public class GearPositionIntegrator extends GearIntegrator implements Integrator
      * @return List of derivatives up to order 5
      *
      */
-    private List<Double> computeDerivatives(List<Double> prevDerivatives){
-        int k = prevDerivatives.size() - 1; // order = 5 → size = 6
-        List<Double> newDerivatives = new ArrayList<>(Collections.nCopies(prevDerivatives.size(), 0.0));
+    private List<Vector3> computeDerivatives(List<Vector3> prevDerivatives) {
+        int k = prevDerivatives.size() - 1;
+        List<Vector3> newDerivatives = new ArrayList<>(Collections.nCopies(prevDerivatives.size(), Vector3.ZERO));
 
         for (int i = 0; i <= k; i++) {
-            double value = 0.0;
+            Vector3 sum = Vector3.ZERO;
+            // For the i-th derivative, sum contributions from all higher-order derivatives j
             for (int j = i; j <= k; j++) {
-                value += prevDerivatives.get(j) * Math.pow(dt, j - i) / factorial(j - i);
+                double factor = Math.pow(dt, j - i) / factorial(j - i);
+                sum = sum.add(prevDerivatives.get(j).mult(factor));
             }
-            newDerivatives.set(i, value);
+            newDerivatives.set(i, sum);
         }
         return newDerivatives;
     }
-
 
     @Override
     public List<Particle> step(Collection<Particle> entities) {
@@ -63,47 +64,55 @@ public class GearPositionIntegrator extends GearIntegrator implements Integrator
     private List<Particle> correctParticles(Map<Particle, Vector3> newParticles, Collection<Particle> oldParticles){
         //1.Acceleration
         //a = F/m
-        double mass = 70.0;
-        Map<Particle, Vector3> newAccelerations = newParticles.entrySet().stream().map(entry->{
-            var force = entry.getValue();
-            var particle = entry.getKey();
-            var acceleration = force.div(mass);
-            entry.setValue(acceleration);
-            return entry;
-        }).collect(HashMap::new, (m,e)->m.put(e.getKey(), e.getValue()), HashMap::putAll);
+        Map<Particle, Vector3> newAccelerations = new HashMap<>();
+        for (var entry : newParticles.entrySet()) {
+            Vector3 acceleration = entry.getValue();
+            newAccelerations.put(entry.getKey(), acceleration);
+        }
 
-       List<Particle> correctedParticles = new ArrayList<>();
-        for(Map.Entry<Particle, Vector3> entry : newAccelerations.entrySet()){
+        List<Particle> correctedParticles = new ArrayList<>();
+
+        // 2. Loop over particles and correct
+        for (Map.Entry<Particle, Vector3> entry : newAccelerations.entrySet()) {
             var particle = entry.getKey();
             var acceleration = entry.getValue();
-            List<Double> predictedDerivatives = particle.getDerivatives();
-            List<Double> derivatives = oldParticles.stream()
+
+            List<Vector3> predictedDerivatives = particle.getDerivatives();
+            List<Vector3> oldDerivatives = oldParticles.stream()
                     .filter(p -> p.getID() == particle.getID())
                     .findFirst()
                     .orElseThrow()
                     .getDerivatives();
-            //deltaR2 = (a-a_predicted)^2/2
-            double deltaR2 = Math.pow(derivatives.get(2) - predictedDerivatives.get(2),2)/2;
 
-            //Correct each derivative
-            List<Double> correctedDerivatives = correctDerivatives(predictedDerivatives, deltaR2);
+            // Δr² = a_new - a_predicted   (vector!)
+            Vector3 deltaR2 = acceleration.subtract(predictedDerivatives.get(2)).mult(dt * dt / 2.0);
+
+            // Correct all derivatives
+            List<Vector3> correctedDerivatives = correctDerivatives(predictedDerivatives, deltaR2);
+
             correctedParticles.add(new Particle(particle, correctedDerivatives));
         }
+
         return correctedParticles;
+
     }
 
-    private double factorial(int n){
-        if(n == 0) return 1;
-        return n * factorial(n-1);
+    private int factorial(int n) {
+        return (n <= 1) ? 1 : n * factorial(n - 1);
     }
-    private List<Double> correctDerivatives(List<Double> predictedDerivatives, double deltaR2){
-        List<Double> correctedDerivatives = new ArrayList<>(Collections.nCopies(predictedDerivatives.size(), 0.0));
-        for(int i = 0; i < predictedDerivatives.size(); i++){
-            double r_i = predictedDerivatives.get(i);
+
+    private List<Vector3> correctDerivatives(List<Vector3> predictedDerivatives, Vector3 deltaR2) {
+        List<Vector3> correctedDerivatives = new ArrayList<>(predictedDerivatives.size());
+
+        for (int i = 0; i < predictedDerivatives.size(); i++) {
             double alpha_i = getGearCoefficients().get(i);
-            double r_i_corrected = r_i + alpha_i * deltaR2 * factorial(i) /Math.pow(dt, i) ;
-            correctedDerivatives.set(i, r_i_corrected);
+            double scale = alpha_i * factorial(i) / Math.pow(dt, i);
+
+            // Vector correction
+            Vector3 r_i_corrected = predictedDerivatives.get(i).add(deltaR2.mult(scale));
+            correctedDerivatives.add(r_i_corrected);
         }
+
         return correctedDerivatives;
     }
     @Override
