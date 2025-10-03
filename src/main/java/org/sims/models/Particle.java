@@ -39,7 +39,6 @@ public class Particle implements Named{
         this.velocity = velocity;
         this.radius = radius;
         this.memory = memory;
-        this.derivatives = initializeDerivatives(position, velocity, DEFAULT_SPRING_CONSTANT, DEFAULT_PARTICLE_MASS, DEFAULT_DAMPENING_CONSTANT);
     }
 
     /**
@@ -68,8 +67,6 @@ public class Particle implements Named{
         this.position = pos;
         this.velocity = vel;
         this.radius = p.radius;
-        this.derivatives = initializeDerivatives(pos, velocity, DEFAULT_SPRING_CONSTANT, DEFAULT_PARTICLE_MASS, DEFAULT_DAMPENING_CONSTANT);
-
     }
 
     public Particle(Particle p, List<Vector3> derivatives) {
@@ -78,7 +75,20 @@ public class Particle implements Named{
         this.derivatives = derivatives;
     }
 
-    private List<Vector3> initializeDerivatives(Vector3 position, Vector3 velocity, double springConstant, double particleMass, double dampeningConstant){
+    public void initializeGearSpringDerivatives(Vector3 position, Vector3 velocity, double springConstant, double particleMass, double dampeningConstant){
+        double k = springConstant;
+        double m = particleMass;
+        double gamma = dampeningConstant;
+        Vector3 r0 = position;
+        Vector3 r1 = velocity;
+        Vector3 r2 = r0.mult(-k/m).add(r1.mult(-gamma/m));
+        Vector3 r3 = r1.mult(-k/m).add(r2.mult(-gamma/m));
+        Vector3 r4 = r2.mult(-k/m).add(r3.mult(-gamma/m));
+        Vector3 r5 = r3.mult(-k/m).add(r4.mult(-gamma/m));
+
+        this.derivatives = List.of(r0, r1, r2, r3, r4, r5);
+    }
+    public static List<Vector3> initializeGearGravityDerivatives(Vector3 position, Vector3 velocity, double springConstant, double particleMass, double dampeningConstant){
         double k = springConstant;
         double m = particleMass;
         double gamma = dampeningConstant;
