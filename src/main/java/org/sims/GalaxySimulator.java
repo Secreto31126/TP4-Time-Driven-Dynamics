@@ -1,5 +1,7 @@
 package org.sims;
 
+import org.sims.galaxy.GravityForce;
+import org.sims.integrals.BeemanIntegrator;
 import org.sims.integrals.GearIntegrator;
 import org.sims.integrals.GearType;
 import org.sims.integrals.Verlet;
@@ -22,13 +24,26 @@ public class GalaxySimulator {
     public final double dt;
     public final long steps;
     public String integrationMethod;
-    public final OscillatorForce force;
+    public final GravityForce force;
     public final long SAVE_INTERVAL;
+    public final long N;
+    public final double mass;
+    public final double galaxyRadius;
+    public final double particleRadius;
+    public final double velocityMagnitude;
+    public List<Particle> particles;
 
-    public GalaxySimulator(final double dt, final double steps, final String integrationMethod, Double springConstant, Double dampingCoefficient, Double mass, long SAVE_INTERVAL) {
+    public GalaxySimulator(final double dt, final double steps, final String integrationMethod, long SAVE_INTERVAL,
+                           long N, double mass, double galaxyRadius, double particleRadius, double velocityMagnitude, List<Particle> particles) {
+        this.mass = mass;
+        this.N = N;
         this.dt = dt;
         this.integrationMethod = integrationMethod;
-        this.force = new OscillatorForce(springConstant, dampingCoefficient, mass);
+        this.galaxyRadius = galaxyRadius;
+        this.particleRadius = particleRadius;
+        this.velocityMagnitude = velocityMagnitude;
+        this.particles = particles;
+        this.force = new GravityForce();
         this.steps = (long) steps;
         this.SAVE_INTERVAL = SAVE_INTERVAL;
     }
@@ -36,7 +51,6 @@ public class GalaxySimulator {
 
     public void simulate() throws IOException {
         Integrator<Particle> integrator = null;
-        List<Particle> particles = List.of(new Particle(new Vector3(1, 0, 0), Vector3.ZERO, 1.0));
         String integratorName = "";
 
         Resources.init();
@@ -47,19 +61,21 @@ public class GalaxySimulator {
         switch (integrationMethod) {
             case "gearposition":
                 integrator = new GearIntegrator(dt, force, GearType.POSITION);
-                integratorName = "GearPosition";
-                particles.forEach(particle -> particle.initializeGearSpringDerivatives(
-                        particle.getPosition(), particle.getVelocity(), force.k(), force.mass(), force.gamma()));
+                integratorName = "GearGravityPosition";
+                particles.forEach(particle -> particle.setDerivatives(particle.initializeGearGravityDerivatives(particle.getPosition(), particle.getVelocity())));
                 break;
             case "gearvelocity":
                 integrator = new GearIntegrator(dt, force, GearType.VELOCITY);
-                integratorName = "GearVelocity";
-                particles.forEach(particle -> particle.initializeGearSpringDerivatives(
-                        particle.getPosition(), particle.getVelocity(), force.k(), force.mass(), force.gamma()));
+                integratorName = "GearGravityVelocity";
+                particles.forEach(particle -> particle.setDerivatives(particle.initializeGearGravityDerivatives(particle.getPosition(), particle.getVelocity())));
                 break;
             case "verlet":
                 integrator = new Verlet(dt, force);
-                integratorName = "Verlet";
+                integratorName = "VerletGravity";
+                break;
+            case "beeman":
+                integrator = new BeemanIntegrator(dt, force);
+                integratorName = "BeemanGravity";
                 break;
             default:
                 System.out.println("Unknown integration method: " + integrationMethod);
@@ -69,8 +85,8 @@ public class GalaxySimulator {
 
         File file = new File("sim/setup.txt");
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(String.format(Locale.US, "%d %.14f %.14f %.14f %.14f %s\n",
-                steps, dt, force.k(), force.gamma(), force.mass(), integratorName));
+        writer.write(String.format(Locale.US, "%d %.14f %s\n",
+                steps, dt, integratorName));
         writer.close();
 
 

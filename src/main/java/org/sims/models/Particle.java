@@ -21,9 +21,6 @@ public class Particle implements Named{
     private final double radius;
     private Vector3 memory;
     private List<Vector3> derivatives;
-    private static final double DEFAULT_SPRING_CONSTANT = 10.0;
-    private static final double DEFAULT_PARTICLE_MASS = 1.0;
-    private static final double DEFAULT_DAMPENING_CONSTANT = 1.0;
 
     /**
      * Create a new particle with a unique ID.
@@ -88,20 +85,67 @@ public class Particle implements Named{
 
         this.derivatives = List.of(r0, r1, r2, r3, r4, r5);
     }
-    public static List<Vector3> initializeGearGravityDerivatives(Vector3 position, Vector3 velocity, double springConstant, double particleMass, double dampeningConstant){
-        double k = springConstant;
-        double m = particleMass;
-        double gamma = dampeningConstant;
+    public List<Vector3> initializeGearGravityDerivatives(Vector3 position, Vector3 velocity){
+        //mu = G*m*m
+        double mu = 1;
+
         Vector3 r0 = position;
         Vector3 r1 = velocity;
-        Vector3 r2 = r0.mult(-k/m).add(r1.mult(-gamma/m));
-        Vector3 r3 = r1.mult(-k/m).add(r2.mult(-gamma/m));
-        Vector3 r4 = r2.mult(-k/m).add(r3.mult(-gamma/m));
-        Vector3 r5 = r3.mult(-k/m).add(r4.mult(-gamma/m));
+
+        double r2sq = r0.dot(r0);              // |r|^2
+        double rmag  = Math.sqrt(r2sq);        // |r|
+        double invR  = 1.0 / rmag;
+        double invR3 = invR * invR * invR;     // 1/|r|^3
+        double invR5 = invR3 * invR * invR;    // 1/|r|^5
+
+        // a = -μ r / |r|^3
+        Vector3 r2 = r0.mult(-mu * invR3);
+
+        // j = -μ ( v / |r|^3 - 3 (r·v) r / |r|^5 )
+        double rv = r0.dot(r1);
+        Vector3 r3 = r1.mult(-mu * invR3)
+                .add(r0.mult(3.0 * mu * rv * invR5));
+
+        // If you want, start r4 and r5 at zero; Gear will refine after the first step.
+        Vector3 r4 = Vector3.ZERO;
+        Vector3 r5 = Vector3.ZERO;
 
         return List.of(r0, r1, r2, r3, r4, r5);
 
     }
+
+    /**
+     * Creates N particles around a nucleous to simulate a galaxy.
+     * @param N The number of particles to create
+     * @param nucleous The position of the nucleous
+     * @param galaxyRadius The maximum distance from the nucleous
+     * @return A list of particles
+     */
+    public static List<Particle> spawnGalaxy(final long N, final Vector3 nucleous, final double galaxyRadius, final double particleRadius, final double velocityMagnitude){
+        List<Particle> particles = new ArrayList<>();
+        for(int i=0; i<N; i++){
+            double randPositionX = (Math.random() * 2 - 1) * galaxyRadius;
+            double randPositionY = (Math.random() * 2 - 1) * galaxyRadius;
+            double randPositionZ = (Math.random() * 2 - 1) * galaxyRadius;
+            Vector3 position = new Vector3(randPositionX, randPositionY, randPositionZ).add(nucleous);
+
+            //random velocity with fixed magnitude
+            double randVelocityX = (Math.random() * 2 - 1);
+            double randVelocityY = (Math.random() * 2 - 1);
+            double randVelocityZ = (Math.random() * 2 - 1);
+            Vector3 velocity = new Vector3(randVelocityX, randVelocityY, randVelocityZ);
+            double velocityNorm = velocity.norm();
+
+            // v = v/|v| * fixedMagnitude
+            Vector3 normalizedVelocity = velocity.div(velocityNorm).mult(velocityMagnitude);
+            Particle p = new Particle(position, normalizedVelocity, particleRadius);
+
+            particles.add(p);
+        }
+
+        return particles;
+    }
+
     public List<Vector3> getDerivatives() {
         return derivatives;
     }

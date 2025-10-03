@@ -2,9 +2,13 @@ package org.sims;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.sims.models.Particle;
+import org.sims.models.Vector3;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,12 +43,26 @@ public class MainGalaxy {
 
         final double dt = (double) params.get("dt");
         final String integrator = params.get("integrator").toString();
-        final double springConstant = (double) params.get("spring_constant");
-        final double dampingCoefficient = (double) params.get("damping_coefficient");
-        final double mass = (double) params.get("mass");
         final double steps = (double) params.get("steps");
+        final long N1 = ((Double) params.get("N1")).longValue();
+        final long N2 = ((Double) params.get("N2")).longValue();
+        final double galaxyRadius = (double) params.get("galaxy_radius");
+        final double particleRadius = (double) params.get("particle_radius");
+        final double velocityMagnitude = (double) params.get("velocity_magnitude");
+        final double mass = (double) params.get("mass");
+        List<Particle> particles = new ArrayList<>();
+        final boolean single_galaxy = (boolean) params.get("single_galaxy");
+        if (!single_galaxy) {
+            List<Particle> galaxy1 = Particle.spawnGalaxy(N1, new Vector3(-2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, velocityMagnitude);
+            List<Particle> galaxy2 = Particle.spawnGalaxy(N2, new Vector3(2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, -velocityMagnitude);
+            particles.addAll(galaxy1);
+        }
+        else{
+            particles = Particle.spawnGalaxy(N1, Vector3.ZERO, galaxyRadius, particleRadius, velocityMagnitude);
 
-        new GalaxySimulator(dt, steps, integrator, springConstant, dampingCoefficient, mass, SAVE_INTERVAL).simulate();
+        }
+
+        new GalaxySimulator(dt, steps, integrator, SAVE_INTERVAL, N1, mass, galaxyRadius, particleRadius, velocityMagnitude, particles).simulate();
     }
 
 }
