@@ -3,8 +3,9 @@ from typing import Callable
 import time
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
 from matplotlib.animation import FuncAnimation
+
+import numpy as np
 
 from tqdm import tqdm
 
@@ -18,19 +19,29 @@ abar = None
 def main():
     global abar
 
-    with open(resources.path("setup.txt")) as _:
-        pass
-
     executor = Executor(frames.next, range(frames.count()))
 
-    fig, ax = plt.subplots() # pyright: ignore[reportUnknownMemberType]
-    ax.set_aspect('equal', adjustable="box")
+    fig = plt.figure() # pyright: ignore[reportUnknownMemberType]
+    ax = fig.add_subplot(111, projection='3d') # pyright: ignore[reportUnknownMemberType]
 
-    circles: list[Circle] = []
+    s = 1.0
+    ax.set_xlim(-s, s) # pyright: ignore[reportUnknownMemberType]
+    ax.set_ylim(-s, s) # pyright: ignore[reportUnknownMemberType]
+    ax.set_zlim(-s, s) # pyright: ignore[reportUnknownMemberType]
+
+    ax.set_xlabel('X') # pyright: ignore[reportUnknownMemberType]
+    ax.set_ylabel('Y') # pyright: ignore[reportUnknownMemberType]
+    ax.set_zlabel('Z') # pyright: ignore[reportUnknownMemberType]
+
+    x = np.array([])
+    y = np.array([])
+    z = np.array([])
     for p in frames.next(0)[1]:
-        c = Circle((p.position.x, p.position.y), radius=p.radius, color="blue")
-        ax.add_patch(c)
-        circles.append(c)
+        x = np.append(x, p.position.x)
+        y = np.append(y, p.position.y)
+        z = np.append(z, p.position.z)
+
+    scat = ax.scatter(x, y, z, marker='o') # pyright: ignore[reportArgumentType, reportUnknownMemberType]
 
     def update(particles: list[Particle]):
         global abar
@@ -38,14 +49,20 @@ def main():
         if abar is not None and abar.n % abar.total == 0:
             abar.reset()
 
-        for i, particle in enumerate(particles):
-            circles[i].center = particle.position.tuple()
-            circles[i].radius = particle.radius
+        x = np.array([])
+        y = np.array([])
+        z = np.array([])
+        for particle in particles:
+            x = np.append(x, particle.position.x)
+            y = np.append(y, particle.position.y)
+            z = np.append(z, particle.position.z)
+
+        scat._offsets3d = (x, y, z) # pyright: ignore[reportAttributeAccessIssue]
 
         if abar is not None:
             abar.update()
 
-        return circles
+        return scat,
 
     ani = FuncAnimation( # pyright: ignore[reportUnusedVariable]
         fig,
@@ -53,7 +70,7 @@ def main():
         frames=executor.stream(),
         save_count=frames.count(),
         interval=5,
-        blit=True,
+        blit=False,
         repeat=True
     )
 
