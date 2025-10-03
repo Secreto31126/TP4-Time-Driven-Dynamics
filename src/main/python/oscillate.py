@@ -46,8 +46,9 @@ def main(seconds: float):
 if __name__ == "__main__":
     sim, sol, err, t, dt, integral = main(5)
 
-    os.makedirs(resources.path('osc-error', integral), exist_ok=True)
-    with open(resources.path('osc-error', integral, f'{dt}.txt'), 'w') as f:
+    folder = resources.path('osc-error', integral)
+    os.makedirs(folder, exist_ok=True)
+    with open(resources.path(folder, f'{dt}.txt'), 'w') as f:
         f.write(f"{err}\n")
 
     plt.plot(t, sol, ls='--', lw=3) # pyright: ignore[reportUnknownMemberType]
