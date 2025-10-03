@@ -24,7 +24,7 @@ def main():
     fig = plt.figure() # pyright: ignore[reportUnknownMemberType]
     ax = fig.add_subplot(111, projection='3d') # pyright: ignore[reportUnknownMemberType]
 
-    s = 1.0
+    s = 5.0
     ax.set_xlim(-s, s) # pyright: ignore[reportUnknownMemberType]
     ax.set_ylim(-s, s) # pyright: ignore[reportUnknownMemberType]
     ax.set_zlim(-s, s) # pyright: ignore[reportUnknownMemberType]
