@@ -1,6 +1,7 @@
 package org.sims;
 
 import com.google.gson.Gson;
+import org.sims.integrals.BeemanIntegrator;
 import org.sims.integrals.GearPositionIntegrator;
 import org.sims.integrals.Verlet;
 import org.sims.interfaces.Force;
@@ -78,9 +79,13 @@ class Simulator{
                 integrator = new Verlet(dt, force);
                 integratorName = "Verlet";
                 break;
+            case "beeman":
+                integrator = new BeemanIntegrator(dt, force);
+                integratorName = "Beeman";
+                break;
             default:
                 System.out.println("Unknown integration method: " + integrationMethod);
-                System.out.println("Available methods: gearposition, gearvelocity, verlet");
+                System.out.println("Available methods: gearposition, gearvelocity, verlet, beeman");
                 System.exit(1);
         }
 
