@@ -1,5 +1,6 @@
 package org.sims;
 
+import org.sims.integrals.BeemanIntegrator;
 import org.sims.integrals.GearIntegrator;
 import org.sims.integrals.GearType;
 import org.sims.integrals.Verlet;
@@ -60,6 +61,10 @@ class OscilationSimulator {
             case "verlet":
                 integrator = new Verlet(dt, force);
                 integratorName = "Verlet";
+                break;
+            case "beeman":
+                integrator = new BeemanIntegrator(dt, force);
+                integratorName = "Beeman";
                 break;
             default:
                 System.out.println("Unknown integration method: " + integrationMethod);
