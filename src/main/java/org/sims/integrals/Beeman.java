@@ -11,19 +11,29 @@ public record Beeman(Double dt, Force<Particle> force) implements Integrator<Par
     @Override
     public List<Particle> step(final Collection<Particle> particles) {
         final var acc = force.apply(particles);
+        final var dt2 = dt * dt;
 
-        return particles.stream().map(p -> {
-            final var a = p.getPosition().mult(2);
-            final var b = p.getMemory().neg();
-            final var c = acc.get(p).mult(dt * dt);
+        final var moved = particles.stream().map(p -> {
+            final var future_pos = p.getPosition()
+                    .add(p.getVelocity().mult(dt))
+                    .add(acc.get(p).mult((2.0 / 3.0) * dt2))
+                    .subtract(p.getMemory().mult((1.0 / 6.0) * dt2));
 
-            final var pos = a.add(b).add(c);
-            final var vel = pos.subtract(p.getMemory()).div(2 * dt);
-
-            Particle next = new Particle(p, pos, vel);
-            next.setMemory(p.getPosition());
-            return next;
+            return new Particle(p, future_pos, p.getVelocity());
         }).toList();
+
+        final var future_acc = force.apply(moved);
+
+        return moved.stream().map(p -> {
+            final var vel = p.getVelocity()
+                    .add(future_acc.get(p).mult((1.0 / 3.0) * dt))
+                    .add(acc.get(p).mult((5.0 / 6.0) * dt))
+                    .subtract(p.getMemory().mult((1.0 / 6.0) * dt));
+
+            p.setMemory(acc.get(p));
+            return new Particle(p, p.getPosition(), vel);
+        }).toList();
+
     }
 
     public static class Constructor implements Integrator.Constructor<Particle> {
