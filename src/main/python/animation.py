@@ -2,6 +2,8 @@ from typing import Callable
 
 import time
 
+import sys
+
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
@@ -16,7 +18,7 @@ from streaming import SequentialStreamingExecutor as Executor
 from classes.particle import Particle
 
 abar = None
-def main():
+def main(s: float):
     global abar
 
     executor = Executor(frames.next, range(frames.count()))
@@ -24,7 +26,6 @@ def main():
     fig = plt.figure() # pyright: ignore[reportUnknownMemberType]
     ax = fig.add_subplot(111, projection='3d') # pyright: ignore[reportUnknownMemberType]
 
-    s = 5.0
     ax.set_xlim(-s, s) # pyright: ignore[reportUnknownMemberType]
     ax.set_ylim(-s, s) # pyright: ignore[reportUnknownMemberType]
     ax.set_zlim(-s, s) # pyright: ignore[reportUnknownMemberType]
@@ -90,4 +91,4 @@ def main():
         print(f"Animation saved at {filename}")
 
 if __name__ == "__main__":
-    main()
+    main(float(sys.argv[1]) if len(sys.argv) > 1 else 5.0)

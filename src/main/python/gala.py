@@ -1,6 +1,12 @@
 # Galaxy -> gala.py
 # Sorry :]
 
+import os
+
+import sys
+
+import time
+
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -20,6 +26,8 @@ def main():
     with open(resources.path("setup.txt"), "r") as f:
         line = f.readline().strip().split(' ')
         steps = int(line[0])
+        dt = float(line[1])
+        integral = line[-1]
 
     kin = np.array([])
     pot = np.array([])
@@ -27,13 +35,23 @@ def main():
         kin = np.append(kin, ener.kinetic(particles))
         pot = np.append(pot, ener.potential(particles, H))
 
-    return kin, pot, kin + pot, np.linspace(0, steps, frames.count())
+    return kin, pot, kin + pot, np.linspace(0, steps, frames.count()), dt, integral, len(frames.next(0)[1])
 
 if __name__ == "__main__":
-    kin, pot, tot, steps = main()
+    kin, pot, tot, steps, dt, integral, n = main()
 
-    plt.plot(steps, kin, label="Cinética") # pyright: ignore[reportUnknownMemberType]
-    plt.plot(steps, pot, label="Potencial") # pyright: ignore[reportUnknownMemberType]
+    folder = resources.path('graverr', integral, str(n), str(dt))
+    os.makedirs(folder, exist_ok=True)
+    np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), [np.std(tot)])
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--no-plot":
+            exit(0)
+
+        if sys.argv[1] == "--all":
+            plt.plot(steps, kin, label="Cinética") # pyright: ignore[reportUnknownMemberType]
+            plt.plot(steps, pot, label="Potencial") # pyright: ignore[reportUnknownMemberType]
+
     plt.plot(steps, tot, label="Energía Total") # pyright: ignore[reportUnknownMemberType]
 
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
