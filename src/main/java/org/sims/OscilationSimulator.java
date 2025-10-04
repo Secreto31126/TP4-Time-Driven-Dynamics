@@ -48,13 +48,13 @@ class OscilationSimulator {
         switch (integrationMethod) {
             case "gearposition":
                 integrator = new GearIntegrator(dt, force, GearType.POSITION);
-                integratorName = "GearPosition";
+                integratorName = "Gear5";
                 particles.forEach(particle -> particle.initializeGearSpringDerivatives(
                         particle.getPosition(), particle.getVelocity(), force.k(), force.mass(), force.gamma()));
                 break;
             case "gearvelocity":
                 integrator = new GearIntegrator(dt, force, GearType.VELOCITY);
-                integratorName = "GearVelocity";
+                integratorName = "Gear5";
                 particles.forEach(particle -> particle.initializeGearSpringDerivatives(
                         particle.getPosition(), particle.getVelocity(), force.k(), force.mass(), force.gamma()));
                 break;

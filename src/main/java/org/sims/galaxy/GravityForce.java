@@ -17,17 +17,16 @@ public class GravityForce implements Force<Particle> {
     @Override
     public Map<Particle, Vector3> apply(Collection<Particle> particles) {
 
-        Map<Particle, Vector3> forcesMap = new HashMap<>();
-        for (Particle p : particles) {
-            for(final Particle other : particles){
-                if(!p.equals(other)){
-                    Vector3 force = Forces.gravity(p, other);
+        Map<Particle, Vector3> accMap = new HashMap<>();
 
-                    // Sum the forces acting on particle p to previous contributions
-                    forcesMap.putIfAbsent(p, forcesMap.getOrDefault(p, Vector3.ZERO).add(force));
-                }
+        // O(N^2) simple version; you can switch to i<j pairing later
+        for (Particle p : particles) {
+            for (Particle other : particles) {
+                if (p == other) continue;
+                Vector3 a = Forces.gravity(p, other); // should return *acceleration* on p due to other
+                accMap.merge(p, a, Vector3::add);     // <-- accumulate properly
             }
         }
-        return forcesMap;
+        return accMap;
     }
 }

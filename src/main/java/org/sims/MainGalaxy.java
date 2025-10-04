@@ -55,11 +55,11 @@ public class MainGalaxy {
         if (!single_galaxy) {
             List<Particle> galaxy1 = Particle.spawnGalaxy(N1, new Vector3(-2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, velocityMagnitude);
             List<Particle> galaxy2 = Particle.spawnGalaxy(N2, new Vector3(2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, -velocityMagnitude);
+            galaxy1.addAll(galaxy2);
             particles.addAll(galaxy1);
         }
         else{
             particles = Particle.spawnGalaxy(N1, Vector3.ZERO, galaxyRadius, particleRadius, velocityMagnitude);
-
         }
 
         new GalaxySimulator(dt, steps, integrator, SAVE_INTERVAL, N1, mass, galaxyRadius, particleRadius, velocityMagnitude, particles).simulate();

@@ -61,12 +61,12 @@ public class GalaxySimulator {
         switch (integrationMethod) {
             case "gearposition":
                 integrator = new GearIntegrator(dt, force, GearType.POSITION);
-                integratorName = "GearGravityPosition";
+                integratorName = "Gear5";
                 particles.forEach(particle -> particle.setDerivatives(particle.initializeGearGravityDerivatives(particle.getPosition(), particle.getVelocity())));
                 break;
             case "gearvelocity":
                 integrator = new GearIntegrator(dt, force, GearType.VELOCITY);
-                integratorName = "GearGravityVelocity";
+                integratorName = "Gear5";
                 particles.forEach(particle -> particle.setDerivatives(particle.initializeGearGravityDerivatives(particle.getPosition(), particle.getVelocity())));
                 break;
             case "verlet":
