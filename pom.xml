@@ -6,6 +6,7 @@
   <groupId>org.sims</groupId>
   <artifactId>tp4</artifactId>
   <version>1.0</version>
+  <packaging>jar</packaging>
 
   <name>tp4</name>
 
@@ -51,6 +52,42 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <executions>
+            <execution>
+              <id>oscillator</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+              <configuration>
+                <classifier>oscillator</classifier>
+                <archive>
+                  <manifest>
+                    <addClasspath>true</addClasspath>
+                    <classpathPrefix>lib/</classpathPrefix>
+                    <mainClass>org.sims.MainOscillator</mainClass>
+                  </manifest>
+                </archive>
+              </configuration>
+            </execution>
+            <execution>
+              <id>galaxy</id>
+              <phase>package</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+              <configuration>
+                <classifier>galaxy</classifier>
+                <archive>
+                  <manifest>
+                    <addClasspath>true</addClasspath>
+                    <classpathPrefix>lib/</classpathPrefix>
+                    <mainClass>org.sims.MainGalaxy</mainClass>
+                  </manifest>
+                </archive>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
