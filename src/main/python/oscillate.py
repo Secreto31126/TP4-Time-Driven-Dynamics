@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+import sys
+
 import os
 
 from tqdm import tqdm
@@ -50,6 +52,9 @@ if __name__ == "__main__":
     os.makedirs(folder, exist_ok=True)
     with open(resources.path(folder, f'{dt}.txt'), 'w') as f:
         f.write(f"{err}\n")
+
+    if "--no-plot" in sys.argv:
+        exit(0)
 
     plt.plot(t, sol, ls='--', lw=3) # pyright: ignore[reportUnknownMemberType]
     plt.plot(t, sim) # pyright: ignore[reportUnknownMemberType]
