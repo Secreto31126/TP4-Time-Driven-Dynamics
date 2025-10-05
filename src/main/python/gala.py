@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     folder = resources.path('graverr', integral, str(n), str(dt))
     os.makedirs(folder, exist_ok=True)
-    np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), [np.std(tot)])
+    np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), tot)
 
     if len(sys.argv) > 1:
         if sys.argv[1] == "--no-plot":
