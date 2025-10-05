@@ -41,7 +41,7 @@ def main(seconds: float):
         sim = np.append(sim, particles[0].position.x)
 
     sol = solution(t)
-    err = ecm(sim, sol)
+    err = ecm(sim[1:], sol[:-1])
 
     return sim, sol, err, t, dt, integral
 
