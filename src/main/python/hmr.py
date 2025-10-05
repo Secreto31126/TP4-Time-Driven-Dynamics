@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     i = input("Paso del estacionario (en blanco para no guardar): ")
     if i.strip() != "":
-        hmr_est = int(i) / 10
+        hmr_est = int(int(i) / 10)
         folder = resources.path('hmr', integral, str(N))
         os.makedirs(folder, exist_ok=True)
         np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), hmr[hmr_est:])
