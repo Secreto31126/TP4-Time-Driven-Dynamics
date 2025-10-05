@@ -59,7 +59,7 @@ if __name__ == "__main__":
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
     plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-    plt.ylabel(r"$r_{hm}$ (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.ylabel(r"r$_{hm}$ (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.06)
     plt.show() # pyright: ignore[reportUnknownMemberType]
@@ -67,6 +67,6 @@ if __name__ == "__main__":
     i = input("Paso del estacionario (en blanco para no guardar): ")
     if i.strip() != "":
         hmr_est = int(i) / 10
-        folder = resources.path('hmr', integral)
+        folder = resources.path('hmr', integral, str(N))
         os.makedirs(folder, exist_ok=True)
-        np.savetxt(resources.path(folder, f'{N}.txt'), hmr[hmr_est:])
+        np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), hmr[hmr_est:])
