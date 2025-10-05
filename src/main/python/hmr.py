@@ -1,6 +1,3 @@
-# Galaxy -> gala.py
-# Sorry :]
-
 import os
 import matplotlib.pyplot as plt
 
