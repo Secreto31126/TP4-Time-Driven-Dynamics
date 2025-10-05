@@ -44,13 +44,12 @@ if __name__ == "__main__":
     os.makedirs(folder, exist_ok=True)
     np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), tot)
 
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "--no-plot":
-            exit(0)
+    if "--no-plot" in sys.argv:
+        exit(0)
 
-        if sys.argv[1] == "--all":
-            plt.plot(steps, kin, label="Cinética") # pyright: ignore[reportUnknownMemberType]
-            plt.plot(steps, pot, label="Potencial") # pyright: ignore[reportUnknownMemberType]
+    if "--all" in sys.argv:
+        plt.plot(steps, kin, label="Cinética") # pyright: ignore[reportUnknownMemberType]
+        plt.plot(steps, pot, label="Potencial") # pyright: ignore[reportUnknownMemberType]
 
     plt.plot(steps, tot, label="Energía Total") # pyright: ignore[reportUnknownMemberType]
 
