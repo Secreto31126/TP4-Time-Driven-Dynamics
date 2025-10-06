@@ -45,8 +45,6 @@ if __name__ == "__main__":
             label=integral
         )
 
-    plt.yscale("log") # pyright: ignore[reportUnknownMemberType]
-
     plt.xlabel("N", fontsize=24) # pyright: ignore[reportUnknownMemberType]
     plt.ylabel("<t*> (s)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
