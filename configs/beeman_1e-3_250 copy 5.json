@@ -1,0 +1,14 @@
+{
+  "steps": 10000,
+  "dt": 0.001,
+  "integrator": "beeman",
+  "spring_constant": 1e4,
+  "damping_coefficient": 100.0,
+  "mass": 1,
+  "particle_radius": 1.0,
+  "velocity_magnitude": 0.01,
+  "N1": 250,
+  "N2": 100,
+  "galaxy_radius": 4.0,
+  "single_galaxy": true
+}

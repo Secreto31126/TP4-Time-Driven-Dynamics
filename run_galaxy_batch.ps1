@@ -8,7 +8,7 @@ param(
 # Configuration
 $ParamsPath = "src\main\resources\params.json"
 $VenvActivate = "src\main\python\Scripts\Activate.ps1"
-$PythonScript = "src\main\python\gala.py"
+$PythonScript = "src\main\python\hmr.py"
 
 # Check if config directory exists
 if (-not (Test-Path $ConfigDir)) {
@@ -61,7 +61,7 @@ foreach ($configFile in $jsonFiles) {
     if (Test-Path $VenvActivate) {
         # Activate venv and run Python
         & $VenvActivate
-        $pythonProcess = Start-Process -FilePath "python" -ArgumentList "$PythonScript", "--no-plot" -Wait -PassThru -NoNewWindow
+        $pythonProcess = Start-Process -FilePath "python" -ArgumentList "$PythonScript" -Wait -PassThru -NoNewWindow
 
         if ($pythonProcess.ExitCode -eq 0) {
             Write-Host "Python analysis completed successfully" -ForegroundColor Green
@@ -74,7 +74,7 @@ foreach ($configFile in $jsonFiles) {
     } else {
         Write-Host "Virtual environment activation script not found at $VenvActivate" -ForegroundColor Red
         Write-Host "Attempting to run Python directly..." -ForegroundColor Yellow
-        $pythonProcess = Start-Process -FilePath "python" -ArgumentList "$PythonScript", "--no-plot" -Wait -PassThru -NoNewWindow
+        $pythonProcess = Start-Process -FilePath "python" -ArgumentList "$PythonScript" -Wait -PassThru -NoNewWindow
 
         if ($pythonProcess.ExitCode -ne 0) {
             Write-Host "Python execution failed" -ForegroundColor Red
