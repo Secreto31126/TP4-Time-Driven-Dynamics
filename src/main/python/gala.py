@@ -40,9 +40,10 @@ def main():
 if __name__ == "__main__":
     kin, pot, tot, steps, dt, integral, n = main()
 
-    folder = resources.path('graverr', integral, str(n), str(dt))
-    os.makedirs(folder, exist_ok=True)
-    np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), tot)
+    if "--no-save" in sys.argv:
+        folder = resources.path('graverr', integral, str(n), str(dt))
+        os.makedirs(folder, exist_ok=True)
+        np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), tot)
 
     if "--no-plot" in sys.argv:
         exit(0)
