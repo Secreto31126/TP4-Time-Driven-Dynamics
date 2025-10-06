@@ -38,7 +38,7 @@ if __name__ == "__main__":
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
     plt.xlabel(r"$\Delta$t (s)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-    plt.ylabel("Error Cuadrático Medio", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.ylabel(r"Error Cuadrático Medio ($m^2$)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.grid(which="both") # pyright: ignore[reportUnknownMemberType]
