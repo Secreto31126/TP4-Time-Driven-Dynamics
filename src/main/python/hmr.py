@@ -43,10 +43,11 @@ if __name__ == "__main__":
     if tstar is not None:
         plt.axvline(tstar, linestyle='--', color='r') # pyright: ignore[reportUnknownMemberType]
 
-        folder = resources.path('t-star', integral, str(N))
-        os.makedirs(folder, exist_ok=True)
-        with open(resources.path(folder, f'{int(time.time())}.txt'), 'w') as f:
-            f.write(f"{tstar * dt}\n")
+        if "--no-save" not in sys.argv:
+            folder = resources.path('t-star', integral, str(N))
+            os.makedirs(folder, exist_ok=True)
+            with open(resources.path(folder, f'{int(time.time())}.txt'), 'w') as f:
+                f.write(f"{tstar * dt}\n")
     else:
         print("No se alcanzó un t*")
 
@@ -62,9 +63,10 @@ if __name__ == "__main__":
         plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.08)
         plt.show() # pyright: ignore[reportUnknownMemberType]
 
-    i = input("Paso del estacionario (en blanco para no guardar): ")
-    if i.strip() != "":
-        hmr_est = int(int(i) / 10)
-        folder = resources.path('hmr', integral, str(N))
-        os.makedirs(folder, exist_ok=True)
-        np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), hmr[hmr_est:])
+    if "--no-save" not in sys.argv:
+        i = input("Paso del estacionario (en blanco para no guardar): ")
+        if i.strip() != "":
+            hmr_est = int(int(i) / 10)
+            folder = resources.path('hmr', integral, str(N))
+            os.makedirs(folder, exist_ok=True)
+            np.savetxt(resources.path(folder, f'{int(time.time())}.txt'), hmr[hmr_est:])
