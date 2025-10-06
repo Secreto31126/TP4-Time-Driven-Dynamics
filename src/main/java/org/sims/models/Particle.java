@@ -123,16 +123,17 @@ public class Particle implements Named{
      */
     public static List<Particle> spawnGalaxy(final long N, final Vector3 nucleous, final double galaxyRadius, final double particleRadius, final double velocityMagnitude){
         List<Particle> particles = new ArrayList<>();
+        Random random = new Random();
         for(int i=0; i<N; i++){
-            double randPositionX = (Math.random() * 2 - 1) * galaxyRadius;
-            double randPositionY = (Math.random() * 2 - 1) * galaxyRadius;
-            double randPositionZ = (Math.random() * 2 - 1) * galaxyRadius;
+            double randPositionX = (random.nextGaussian()) * galaxyRadius;
+            double randPositionY = (random.nextGaussian()) * galaxyRadius;
+            double randPositionZ = (random.nextGaussian()) * galaxyRadius;
             Vector3 position = new Vector3(randPositionX, randPositionY, randPositionZ).add(nucleous);
 
             //random velocity with fixed magnitude
-            double randVelocityX = (Math.random() * 2 - 1);
-            double randVelocityY = (Math.random() * 2 - 1);
-            double randVelocityZ = (Math.random() * 2 - 1);
+            double randVelocityX = (random.nextGaussian());
+            double randVelocityY = (random.nextGaussian());
+            double randVelocityZ = (random.nextGaussian());
             Vector3 velocity = new Vector3(randVelocityX, randVelocityY, randVelocityZ);
             double velocityNorm = velocity.norm();
 
