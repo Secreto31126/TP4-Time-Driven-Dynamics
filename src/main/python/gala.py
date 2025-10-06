@@ -57,7 +57,7 @@ if __name__ == "__main__":
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
     plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-    plt.ylabel("Energía (J)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.ylabel("Energía", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 

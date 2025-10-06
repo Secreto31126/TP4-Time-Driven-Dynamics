@@ -61,7 +61,7 @@ if __name__ == "__main__":
         )
 
     plt.xlabel("N", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-    plt.ylabel(r"<r$_{hm}$> (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.ylabel(r"<r$_{hm}$>", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]

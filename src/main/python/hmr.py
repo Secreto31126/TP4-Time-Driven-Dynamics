@@ -58,7 +58,7 @@ if __name__ == "__main__":
         plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
         plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-        plt.ylabel(r"r$_{hm}$ (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+        plt.ylabel(r"r$_{hm}$", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
         if tstar is not None:
             plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]
