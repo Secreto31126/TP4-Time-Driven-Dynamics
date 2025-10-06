@@ -41,7 +41,7 @@ if __name__ == "__main__":
     hmr, tstar, steps, integral, dt, N = main()
 
     if tstar is not None:
-        plt.axvline(tstar, linestyle='--', color='r') # pyright: ignore[reportUnknownMemberType]
+        plt.axvline(tstar, linestyle='--', color='r', label='t*') # pyright: ignore[reportUnknownMemberType]
 
         if "--no-save" not in sys.argv:
             folder = resources.path('t-star', integral, str(N))
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         print("No se alcanzó un t*")
 
     if "--no-plot" not in sys.argv:
-        plt.plot(steps, hmr) # pyright: ignore[reportUnknownMemberType]
+        plt.plot(steps, hmr, label="Radio de media masa") # pyright: ignore[reportUnknownMemberType]
 
         plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
         plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
@@ -60,7 +60,10 @@ if __name__ == "__main__":
         plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
         plt.ylabel(r"r$_{hm}$ (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
-        plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.08)
+        if tstar is not None:
+            plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]
+
+        plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.06)
         plt.show() # pyright: ignore[reportUnknownMemberType]
 
     if "--no-save" not in sys.argv:

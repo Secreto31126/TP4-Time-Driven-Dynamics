@@ -56,5 +56,5 @@ if __name__ == "__main__":
 
     plt.grid(which="both") # pyright: ignore[reportUnknownMemberType]
 
-    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.08)
+    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.05)
     plt.show() # pyright: ignore[reportUnknownMemberType]

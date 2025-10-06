@@ -53,7 +53,7 @@ if __name__ == "__main__":
     plt.xscale("log") # pyright: ignore[reportUnknownMemberType]
     plt.yscale("log") # pyright: ignore[reportUnknownMemberType]
 
-    plt.xlabel(r"$\Delta$t (s)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.xlabel(r"dt (s)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
     plt.ylabel("Error relativo promedio de energía total (J)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
