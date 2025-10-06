@@ -11,19 +11,21 @@ def main():
 
     for integral in os.listdir(resources.path("hmr")):
         for N in os.listdir(resources.path("hmr", integral)):
-            hmr = np.array([])
+            slopes = np.array([])
 
             for filename in os.listdir(resources.path("hmr", integral, N)):
-                with open(resources.path("hmr", integral, N, filename), "r") as f:
-                    hmr = np.append(hmr, float(f.readline().strip()))
+                data = np.loadtxt(resources.path("hmr", integral, N, filename))
+                slope, _ = np.polyfit(np.linspace(0, len(data), len(data)), data, 1)
 
-            mean = np.mean(hmr)
-            std = np.std(hmr)
+                slopes = np.append(slopes, slope)
+
+            slope_mean = np.mean(slopes)
+            slope_std = np.std(slopes)
 
             if integral not in values:
                 values[integral] = {}
 
-            values[integral][int(N)] = (mean, std)
+            values[integral][int(N)] = (slope_mean, slope_std)
 
     return values
 
@@ -43,11 +45,6 @@ if __name__ == "__main__":
             capsize=5,
             label=integral
         )
-
-        fit = np.polyfit(Ns, np.log(means), 1, w=1/np.array(stds))
-        plt.plot(Ns, fit, "r--", label=f"{integral} pendiente") # pyright: ignore[reportUnknownMemberType]
-
-    plt.yscale("log") # pyright: ignore[reportUnknownMemberType]
 
     plt.xlabel("N", fontsize=24) # pyright: ignore[reportUnknownMemberType]
     plt.ylabel(r"<r$_{hm}$> (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
