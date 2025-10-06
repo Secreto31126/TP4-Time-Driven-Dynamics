@@ -63,7 +63,7 @@ class OscilationSimulator {
                 integratorName = "Verlet";
                 break;
             case "beeman":
-                integrator = new BeemanIntegrator(dt, force);
+                integrator = new BeemanIntegrator(dt, force, particles);
                 integratorName = "Beeman";
                 break;
             default:
