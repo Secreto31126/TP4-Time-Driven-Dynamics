@@ -61,7 +61,7 @@ if __name__ == "__main__":
     plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
     plt.ylabel(r"r$_{hm}$ (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
-    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.06)
+    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.08)
     plt.show() # pyright: ignore[reportUnknownMemberType]
 
     i = input("Paso del estacionario (en blanco para no guardar): ")
