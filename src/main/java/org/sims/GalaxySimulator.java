@@ -74,7 +74,7 @@ public class GalaxySimulator {
                 integratorName = "VerletGravity";
                 break;
             case "beeman":
-                integrator = new BeemanIntegrator(dt, force);
+                integrator = new BeemanIntegrator(dt, force, particles);
                 integratorName = "BeemanGravity";
                 break;
             default:

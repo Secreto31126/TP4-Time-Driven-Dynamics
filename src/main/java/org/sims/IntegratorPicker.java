@@ -6,8 +6,8 @@ import org.sims.interfaces.Integrator.Constructor;
 import org.sims.models.*;
 
 public enum IntegratorPicker {
-    VERLET(new Verlet.Constructor()),
-    BEEMAN(new BeemanIntegrator.Constructor());
+    VERLET(new Verlet.Constructor());
+    //BEEMAN(new BeemanIntegrator.Constructor());
 
     private final Integrator.Constructor<? extends Particle> integrator;
 
