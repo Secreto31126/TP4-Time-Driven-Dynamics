@@ -50,19 +50,17 @@ if __name__ == "__main__":
     else:
         print("No se alcanzó un t*")
 
-    if "--no-plot" in sys.argv:
-        exit(0)
+    if "--no-plot" not in sys.argv:
+        plt.plot(steps, hmr) # pyright: ignore[reportUnknownMemberType]
 
-    plt.plot(steps, hmr) # pyright: ignore[reportUnknownMemberType]
+        plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
+        plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
-    plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
-    plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
+        plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+        plt.ylabel(r"r$_{hm}$ (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
-    plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-    plt.ylabel(r"r$_{hm}$ (m)", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-
-    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.08)
-    plt.show() # pyright: ignore[reportUnknownMemberType]
+        plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.08)
+        plt.show() # pyright: ignore[reportUnknownMemberType]
 
     i = input("Paso del estacionario (en blanco para no guardar): ")
     if i.strip() != "":
