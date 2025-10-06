@@ -28,27 +28,27 @@ def main():
     for particles in tqdm(executor.stream(), total=frames.count()):
         hmr = np.append(hmr, ener.half_mass_radius(particles))
 
-    threshold = None
-    for i, r in enumerate(hmr):
-        if r <= 1:
+    tstar = None
+    for i in range(1, len(hmr) - 2):
+        if hmr[i - 1] <= 1 and hmr[i + 1] > 1:
             if i > 0:
-                threshold = (i - 1) * 10
+                tstar = (i - 1) * 10
             break
 
-    return hmr, threshold, np.linspace(0, steps, frames.count()), integral, dt, len(frames.next(0)[1])
+    return hmr, tstar, np.linspace(0, steps, frames.count()), integral, dt, len(frames.next(0)[1])
 
 if __name__ == "__main__":
-    hmr, threshold, steps, integral, dt, N = main()
+    hmr, tstar, steps, integral, dt, N = main()
 
-    if threshold is not None:
-        plt.axvline(threshold, linestyle='--', color='r') # pyright: ignore[reportUnknownMemberType]
+    if tstar is not None:
+        plt.axvline(tstar, linestyle='--', color='r') # pyright: ignore[reportUnknownMemberType]
 
         folder = resources.path('t-star', integral, str(N))
         os.makedirs(folder, exist_ok=True)
         with open(resources.path(folder, f'{int(time.time())}.txt'), 'w') as f:
-            f.write(f"{threshold * dt}\n")
+            f.write(f"{tstar * dt}\n")
     else:
-        print("No se alcanzó un t* con r < 1.")
+        print("No se alcanzó un t*")
 
     if "--no-plot" in sys.argv:
         exit(0)
