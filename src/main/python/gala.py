@@ -35,7 +35,7 @@ def main():
         kin = np.append(kin, ener.kinetic(particles))
         pot = np.append(pot, ener.potential(particles, H))
 
-    return kin, pot, kin + pot, np.linspace(0, steps, frames.count()), dt, integral, len(frames.next(0)[1])
+    return kin, pot, kin + pot, np.linspace(0, steps, frames.count()) * dt, dt, integral, len(frames.next(0)[1])
 
 if __name__ == "__main__":
     kin, pot, tot, steps, dt, integral, n = main()
@@ -54,10 +54,12 @@ if __name__ == "__main__":
 
     plt.plot(steps, tot, label="Energía Total") # pyright: ignore[reportUnknownMemberType]
 
+    plt.ticklabel_format(useOffset=False, style='plain')
+
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
-    plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.xlabel("Tiempo", fontsize=24) # pyright: ignore[reportUnknownMemberType]
     plt.ylabel("Energía", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]

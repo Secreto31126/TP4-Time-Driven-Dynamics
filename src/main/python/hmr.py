@@ -35,7 +35,7 @@ def main():
                 tstar = (i - 1) * 10
             break
 
-    return hmr, tstar, np.linspace(0, steps, frames.count()), integral, dt, len(frames.next(0)[1])
+    return hmr, tstar, np.linspace(0, steps / dt, frames.count()), integral, dt, len(frames.next(0)[1])
 
 if __name__ == "__main__":
     hmr, tstar, steps, integral, dt, N = main()
@@ -54,10 +54,12 @@ if __name__ == "__main__":
     if "--no-plot" not in sys.argv:
         plt.plot(steps, hmr, label="Radio de media masa") # pyright: ignore[reportUnknownMemberType]
 
+        plt.ticklabel_format(useOffset=False, style='plain')
+
         plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
         plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
-        plt.xlabel("Pasos", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+        plt.xlabel("Tiempo", fontsize=24) # pyright: ignore[reportUnknownMemberType]
         plt.ylabel(r"r$_{hm}$", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
         if tstar is not None:
