@@ -17,7 +17,7 @@ def main():
                 energies = np.array([])
                 for filename in os.listdir(dt_path):
                     tot = np.loadtxt(os.path.join(dt_path, filename))[50:] # skip initial transient
-                    energies = np.append(energies, np.abs(tot - tot[0]) / abs(tot[0]))
+                    energies = np.append(energies, np.abs(tot - tot[-1]) / abs(tot[-1]))
 
                 mean = np.mean(energies)
                 std = np.std(energies)
