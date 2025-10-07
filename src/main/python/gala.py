@@ -8,6 +8,7 @@ import sys
 import time
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 
 import numpy as np
 
@@ -22,6 +23,18 @@ H = 0.05
 
 def main():
     executor = Executor(frames.next, range(frames.count()))
+def truncate_at_most_2(n: float) -> str:
+    TRUNC = int(n * 100) / 100
+    return str(TRUNC).rstrip('0').rstrip('.')
+
+def sci_notation(val: float, _):
+    if val == 0:
+        return "0"
+
+    EXP = int(np.floor(np.log10(abs(val))))
+    COEFF = val / (10**EXP)
+
+    return f"${truncate_at_most_2(COEFF)}\\times 10^{{{EXP}}}$"
 
     with open(resources.path("setup.txt"), "r") as f:
         line = f.readline().strip().split(' ')
@@ -55,6 +68,8 @@ if __name__ == "__main__":
     plt.plot(steps, tot, label="Energía Total") # pyright: ignore[reportUnknownMemberType]
 
     plt.ticklabel_format(useOffset=False, style='plain')
+
+    plt.gca().yaxis.set_major_formatter(FuncFormatter(sci_notation)) # pyright: ignore[reportUnknownArgumentType]
 
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
