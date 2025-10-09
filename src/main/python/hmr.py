@@ -64,7 +64,7 @@ if __name__ == "__main__":
             folder = resources.path('t-star', integral, str(N))
             os.makedirs(folder, exist_ok=True)
             with open(resources.path(folder, f'{int(time.time())}.txt'), 'w') as f:
-                f.write(f"{tstar * dt}\n")
+                f.write(f"{tstar}\n")
     else:
         print("No se alcanzó un t*")
 
