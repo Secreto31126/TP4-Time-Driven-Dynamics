@@ -15,18 +15,22 @@ import frames
 import resources
 from streaming import SequentialStreamingExecutor as Executor
 
-def main():
-    executor = Executor(frames.next, range(frames.count()))
-
+def main(cache_key: str | None = None):
     with open(resources.path("setup.txt"), "r") as f:
         line = f.readline().strip().split(' ')
         steps = int(line[0])
         dt = float(line[1])
         integral = line[-1]
 
-    hmr = np.array([])
-    for particles in tqdm(executor.stream(), total=frames.count()):
-        hmr = np.append(hmr, ener.half_mass_radius(particles))
+    if cache_key:
+        folder = resources.path('cache-hmr')
+        hmr = np.load(resources.path(folder, f"{cache_key}.npy"))
+    else:
+        executor = Executor(frames.next, range(frames.count()))
+
+        hmr = np.array([])
+        for particles in tqdm(executor.stream(), total=frames.count()):
+            hmr = np.append(hmr, ener.half_mass_radius(particles))
 
     tstar = None
     for i in range(1, len(hmr) - 2):
@@ -38,7 +42,20 @@ def main():
     return hmr, tstar, np.linspace(0, steps * dt, frames.count()), integral, dt, len(frames.next(0)[1])
 
 if __name__ == "__main__":
-    hmr, tstar, steps, integral, dt, N = main()
+    cache_key = next(filter(lambda x: x.startswith("--cache="), sys.argv), None)
+    if cache_key:
+        cache_key = "=".join(cache_key.split('=')[1:])
+
+    hmr, tstar, steps, integral, dt, N = main(cache_key)
+
+    if "--cache" in sys.argv:
+        folder = resources.path('cache-hmr')
+        os.makedirs(folder, exist_ok=True)
+
+        cache_key = str(int(time.time()))
+        np.save(resources.path(folder, cache_key), hmr)
+
+        print(f"Cached with key: {cache_key}")
 
     if tstar is not None:
         plt.axvline(tstar, linestyle='--', color='r', label='t*') # pyright: ignore[reportUnknownMemberType]
