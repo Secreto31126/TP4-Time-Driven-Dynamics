@@ -35,7 +35,7 @@ def main():
                 tstar = (i - 1) * 10
             break
 
-    return hmr, tstar, np.linspace(0, steps / dt, frames.count()), integral, dt, len(frames.next(0)[1])
+    return hmr, tstar, np.linspace(0, steps * dt, frames.count()), integral, dt, len(frames.next(0)[1])
 
 if __name__ == "__main__":
     hmr, tstar, steps, integral, dt, N = main()
