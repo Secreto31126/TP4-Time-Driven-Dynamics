@@ -83,10 +83,10 @@ if __name__ == "__main__":
         exit(0)
 
     if "--all" in sys.argv:
-        plt.plot(steps, kin, label="Cinética") # pyright: ignore[reportUnknownMemberType]
-        plt.plot(steps, pot, label="Potencial") # pyright: ignore[reportUnknownMemberType]
+        plt.plot(steps, kin, label=r"$E^k(t)$") # pyright: ignore[reportUnknownMemberType]
+        plt.plot(steps, pot, label=r"$E^{pot}(t)$") # pyright: ignore[reportUnknownMemberType]
 
-    plt.plot(steps, tot, label="Energía Total") # pyright: ignore[reportUnknownMemberType]
+    plt.plot(steps, tot, label=r"$E(t)$") # pyright: ignore[reportUnknownMemberType]
 
     plt.ticklabel_format(useOffset=False, style='plain')
 
