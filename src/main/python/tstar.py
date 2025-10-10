@@ -7,7 +7,7 @@ import os
 import resources
 
 def main():
-    values: dict[str, dict[int, tuple[np.floating, np.floating, float]]] = {}
+    values: dict[str, dict[int, tuple[np.floating, np.floating]]] = {}
 
     for integral in os.listdir(resources.path("t-star")):
         for N in os.listdir(resources.path("t-star", integral)):
@@ -24,7 +24,7 @@ def main():
             if integral not in values:
                 values[integral] = {}
 
-            values[integral][int(N)] = (mean, std, len(thresholds))
+            values[integral][int(N)] = (mean, std)
 
     return values
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     for integral, n_dict in values.items():
         sorted_pairs = sorted(n_dict.items())
         Ns, errs = zip(*sorted_pairs)
-        means, stds, runs = zip(*errs)
+        means, stds = zip(*errs)
 
         plt.errorbar( # pyright: ignore[reportUnknownMemberType]
             Ns,
@@ -44,10 +44,6 @@ if __name__ == "__main__":
             capsize=5,
             label=integral
         )
-
-        for n, m, e, run in zip(Ns, means, stds, runs):
-            xy = (n - 40, m + e + 0.15) # Each dot text center (aprox), above the error bar with 0.25 margin
-            plt.annotate(f'{run} iter.', xy, fontsize=16) # pyright: ignore[reportUnknownMemberType]
 
     plt.xlabel("N", fontsize=24) # pyright: ignore[reportUnknownMemberType]
     plt.ylabel("<t*>", fontsize=24) # pyright: ignore[reportUnknownMemberType]
