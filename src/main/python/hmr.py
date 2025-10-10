@@ -69,6 +69,8 @@ if __name__ == "__main__":
         print("No se alcanzó un t*")
 
     if "--no-plot" not in sys.argv:
+        plt.axvline(3.5, linestyle='--', color='g', label='Estacionario') # pyright: ignore[reportUnknownMemberType]
+
         plt.plot(steps, hmr, label=r"$r_{hm}$(t)") # pyright: ignore[reportUnknownMemberType]
 
         plt.ticklabel_format(useOffset=False, style='plain')
@@ -79,8 +81,9 @@ if __name__ == "__main__":
         plt.xlabel("Tiempo", fontsize=24) # pyright: ignore[reportUnknownMemberType]
         plt.ylabel(r"$r_{hm}$", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
-        if tstar is not None:
-            plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]
+        plt.ylim(0, 1.9) # pyright: ignore[reportUnknownMemberType]
+
+        plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
         plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.06)
         plt.show() # pyright: ignore[reportUnknownMemberType]
