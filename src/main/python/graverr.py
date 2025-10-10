@@ -17,7 +17,7 @@ def main():
                 energies = np.array([])
                 for filename in os.listdir(dt_path):
                     tot = np.loadtxt(os.path.join(dt_path, filename))[50:] # skip initial transient
-                    energies = np.append(energies, np.abs(tot - tot[0]) / abs(tot[0]))
+                    energies = np.append(energies, np.abs(tot - tot[-1]) / abs(tot[-1]))
 
                 mean = np.mean(energies)
                 std = np.std(energies)
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     plt.yscale("log") # pyright: ignore[reportUnknownMemberType]
 
     plt.xlabel(r"dt", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-    plt.ylabel("Error relativo promedio de energía total", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.ylabel(r"$\epsilon$", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
