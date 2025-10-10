@@ -61,7 +61,7 @@ if __name__ == "__main__":
         )
 
     plt.xlabel("N", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-    plt.ylabel(r"<r$_{hm}$>", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+    plt.ylabel(r"$\frac{d<r_{hm}>}{dt}$ en estacionario", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
     plt.xticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
     plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
@@ -73,5 +73,5 @@ if __name__ == "__main__":
 
     plt.grid(which="both") # pyright: ignore[reportUnknownMemberType]
 
-    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.13)
+    plt.subplots_adjust(top=0.99, right=0.99, bottom=0.1, left=0.14)
     plt.show() # pyright: ignore[reportUnknownMemberType]

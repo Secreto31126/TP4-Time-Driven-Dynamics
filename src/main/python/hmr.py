@@ -69,7 +69,7 @@ if __name__ == "__main__":
         print("No se alcanzó un t*")
 
     if "--no-plot" not in sys.argv:
-        plt.plot(steps, hmr, label="Radio de media masa") # pyright: ignore[reportUnknownMemberType]
+        plt.plot(steps, hmr, label=r"$r_{hm}$(t)") # pyright: ignore[reportUnknownMemberType]
 
         plt.ticklabel_format(useOffset=False, style='plain')
 
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         plt.yticks(fontsize=20) # pyright: ignore[reportUnknownMemberType]
 
         plt.xlabel("Tiempo", fontsize=24) # pyright: ignore[reportUnknownMemberType]
-        plt.ylabel(r"r$_{hm}$", fontsize=24) # pyright: ignore[reportUnknownMemberType]
+        plt.ylabel(r"$r_{hm}$", fontsize=24) # pyright: ignore[reportUnknownMemberType]
 
         if tstar is not None:
             plt.legend(fontsize=20) # pyright: ignore[reportUnknownMemberType]
