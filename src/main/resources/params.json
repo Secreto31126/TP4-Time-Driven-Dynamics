@@ -1,5 +1,5 @@
 {
-  "steps": 50000,
+  "steps": 100000,
   "dt": 0.001,
   "integrator": "verlet",
   "spring_constant": 1e4,
@@ -7,8 +7,8 @@
   "mass": 1,
   "particle_radius": 1.0,
   "velocity_magnitude": 0.01,
-  "N1": 100,
-  "N2": 100,
+  "N1": 25,
+  "N2": 25,
   "galaxy_radius": 4.0,
   "single_galaxy": false
 }

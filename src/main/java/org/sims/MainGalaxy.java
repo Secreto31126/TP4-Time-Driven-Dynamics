@@ -53,8 +53,8 @@ public class MainGalaxy {
         List<Particle> particles = new ArrayList<>();
         final boolean single_galaxy = (boolean) params.get("single_galaxy");
         if (!single_galaxy) {
-            List<Particle> galaxy1 = Particle.spawnGalaxy(N1, new Vector3(-2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, velocityMagnitude);
-            List<Particle> galaxy2 = Particle.spawnGalaxy(N2, new Vector3(2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, -velocityMagnitude);
+            List<Particle> galaxy1 = Particle.spawnGalaxy(N1, new Vector3(-2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, velocityMagnitude, true, 0.1);
+            List<Particle> galaxy2 = Particle.spawnGalaxy(N2, new Vector3(2*galaxyRadius, 0, 0), galaxyRadius, particleRadius, -velocityMagnitude, true, -0.1);
             galaxy1.addAll(galaxy2);
             particles.addAll(galaxy1);
         }

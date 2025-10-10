@@ -147,6 +147,56 @@ public class Particle implements Named{
         return particles;
     }
 
+    /**
+     * Creates N particles around a nucleous to simulate a galaxy.
+     * @param N The number of particles to create
+     * @param nucleous The position of the nucleous
+     * @param galaxyRadius The maximum distance from the nucleous
+     * @return A list of particles
+     */
+    public static List<Particle> spawnGalaxy(final long N, final Vector3 nucleous, final double galaxyRadius,
+            final double particleRadius, final double velocityMagnitude,
+            boolean collision, final double velocityXMagnitude) {
+                List<Particle> particles = new ArrayList<>();
+                Random random = new Random();
+
+                for (int i = 0; i < N; i++) {
+                    // Posiciones aleatorias gaussianas alrededor del núcleo
+                    double randPositionX = random.nextGaussian() * galaxyRadius;
+                    double randPositionY = random.nextGaussian() * galaxyRadius;
+                    double randPositionZ = random.nextGaussian() * galaxyRadius;
+                    Vector3 position = new Vector3(randPositionX, randPositionY, randPositionZ).add(nucleous);
+
+                    // --- Velocidad ---
+                    // Componente X fija: -0.1, 0 o 0.1
+                    double vx = velocityXMagnitude;
+
+                    // Generar componentes Y y Z aleatorias
+                    double vy = random.nextGaussian();
+                    double vz = random.nextGaussian();
+
+                    // Crear vector base
+                    Vector3 velocity = new Vector3(vx, vy, vz);
+
+                    // Ajustar módulo total al valor especificado
+                    double currentNorm = velocity.norm();
+                    if (currentNorm == 0) {
+                        // Evitar división por cero
+                        vy = 1e-6;
+                        currentNorm = Math.sqrt(vx * vx + vy * vy + vz * vz);
+                    }
+
+                    // Escalar para que el módulo total sea velocityMagnitude
+                    velocity = velocity.mult(velocityMagnitude / currentNorm);
+
+                    // Crear partícula
+                    Particle p = new Particle(position, velocity, particleRadius);
+                    particles.add(p);
+                }
+
+                return particles;
+            }
+
     public List<Vector3> getDerivatives() {
         return derivatives;
     }
